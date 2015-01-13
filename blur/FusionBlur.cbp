@@ -31,8 +31,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="src/BlurJITPipeline.h" />
+		<Unit filename="src/JITInterface.h" />
+		<Unit filename="src/PipelineJITInterface.h" />
+		<Unit filename="src/blurJITCG.h" />
 		<Unit filename="src/blur_jit.cpp" />
+		<Unit filename="src/clock.h" />
 		<Unit filename="src/halide_blur.cpp" />
+		<Unit filename="src/image_io.h" />
 		<Unit filename="src/static_image.h" />
 		<Unit filename="src/test.cpp" />
 		<Extensions>
