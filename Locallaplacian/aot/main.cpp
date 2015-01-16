@@ -21,7 +21,7 @@ inline void testPerformance(int type,int levels,float alpha,float beta,buffer_t*
 		fusion.realizeCPU((buffer_t*)(input));
 		for (int i = 0; i < 100; i++) {
 			gettimeofday(&t1, NULL);
-			Buffer buf=fusion.realizeCPU((buffer_t*)(input));
+			fusion.realizeCPU((buffer_t*)(input));
 			gettimeofday(&t2, NULL);
 			unsigned int t = (t2.tv_sec - t1.tv_sec) * 1000000 + (t2.tv_usec - t1.tv_usec);
 			if (t < bestT) bestT = t;
@@ -42,7 +42,7 @@ inline void testPerformance(int type,int levels,float alpha,float beta,buffer_t*
 		cout<<setw(15)<<"Best GPU: "<<setw(10)<<bestT<<setw(15)<<" Worst GPU: "<<setw(10)<<worstT<<endl;
 		break;
 	case Fus:
-		fusion.realize((buffer_t*)(input),100);
+		fusion.realize((buffer_t*)(input),200);
 		for (int i = 0; i < 5; i++) {
 			gettimeofday(&t1, NULL);
 			fusion.realize((buffer_t*)(input),200);
@@ -65,6 +65,7 @@ int main(int argc,char** argv) {
 	}
 
 	Image<uint16_t> input = load<uint16_t>(argv[1]);
+	cout<<"Image Size : "<<input.width()<<" X "<<input.height()<<" X "<<input.channels()<<endl;
 	int levels = atoi(argv[2]);
 	float alpha = atof(argv[3]), beta = atof(argv[4]);
 
@@ -78,11 +79,11 @@ int main(int argc,char** argv) {
 
 
 
-	Fusion<uint16_t> fusion(levels,alpha,beta);
-	Buffer buf=fusion.realize((buffer_t*)(input),100);
-	Buffer bufg=fusion.realizeGPU((buffer_t*)(input));
-	Image<uint16_t> output(buf.buffer,buf.ptr);
-	Image<uint16_t> outputg(bufg.buffer,bufg.ptr);
-	save(output, argv[5]);
-	save(outputg, "outGPU.png");
+//	Fusion<uint16_t> fusion(levels,alpha,beta);
+//	Buffer buf=fusion.realize((buffer_t*)(input),100);
+//	Buffer bufg=fusion.realizeGPU((buffer_t*)(input));
+//	Image<uint16_t> output(buf.buffer,buf.ptr);
+//	Image<uint16_t> outputg(bufg.buffer,bufg.ptr);
+//	save(output, argv[5]);
+//	save(outputg, "outGPU.png");
 }

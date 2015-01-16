@@ -16,10 +16,11 @@
 		</MakeCommands>
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/aot" prefix_auto="1" extension_auto="1" />
+				<Option output="process" prefix_auto="0" extension_auto="0" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="rgb.png 8 1 1 out.png" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -40,7 +41,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="fusion.cpp" />
 		<Unit filename="fusion.h" />
 		<Unit filename="halide/local_laplacian.cpp" />
 		<Unit filename="image_io.h" />
@@ -49,7 +49,7 @@
 		<Unit filename="static_image.h" />
 		<Extensions>
 			<code_completion />
-			<envvars />
+			<envvars set="default" />
 			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
