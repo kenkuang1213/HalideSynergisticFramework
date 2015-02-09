@@ -37,11 +37,14 @@ typedef struct Buffer {
 #endif // BUFFET_DEFINED
 
 
+#ifndef GPUTHREAD
+#define GPUTHREAD
 void GPUthread(int levels,float alpha,float beta,buffer_t* input,buffer_t* output,int s) {
 
 	local_laplacian_gpu(levels, alpha/(levels-1), beta,input,output);
 //	halide_copy_to_host(NULL,output);
 }
+#endif
 
 
 extern "C" int halide_copy_to_host(void* user_context, buffer_t* buf);
@@ -61,7 +64,7 @@ private:
 	Buffer createBuffer(int x,int y,int z ,int w,int s);
 	buffer_t divBuffer(buffer_t buf,int start,int end);
 	buffer_t divBuffer(buffer_t *buf,int start,int nend) ;
-	Buffer createBuffer(int x,int y,int z,int w);	
+	Buffer createBuffer(int x,int y,int z,int w);
 	int levels;
 	float alpha , beta ;
 
@@ -148,7 +151,7 @@ buffer_t Fusion<T>::divBuffer(buffer_t *buf,int start,int nend) {
 	buff.stride[1] = buf->stride[1];
 	buff.stride[2] = buf->stride[2];
 	buff.stride[3] = buf->stride[3];
-	buff.elem_size = buf->elem_size;	
+	buff.elem_size = buf->elem_size;
 	buff.host_dirty = true;
 	buff.dev_dirty = false;
 	buff.dev = 0;

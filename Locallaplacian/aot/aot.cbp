@@ -41,15 +41,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Makefile" />
+		<Unit filename="clock.h" />
 		<Unit filename="fusion.h" />
+		<Unit filename="fusion2.h" />
 		<Unit filename="halide/local_laplacian.cpp" />
 		<Unit filename="image_io.h" />
-		<Unit filename="local_laplacian_cpu.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="static_image.h" />
 		<Extensions>
 			<code_completion />
-			<envvars set="default" />
+			<envvars set="halide" />
 			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
