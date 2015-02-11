@@ -6,9 +6,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "halide_generated.h"
+#include "gaussinBlur_cpu.h"
+#include "gaussinBlur_gpu.h"
 #include <HalideRuntime.h>
-
+#include "fusion.h"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,"halide_native",__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,"halide_native",__VA_ARGS__)
 
@@ -22,16 +23,16 @@ extern "C" int halide_copy_to_dev(void *, buffer_t *);
 extern "C" int halide_dev_malloc(void *, buffer_t *);
 extern "C" int halide_dev_free(void *, buffer_t *);
 
-int handler(void */* user_context */, const char *msg) {
+int handler(void *, const char *msg) {
     LOGE("%s", msg);
 }
 
 extern "C" {
 JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
-    JNIEnv *env, jobject obj, jbyteArray jSrc, jint j_w, jint j_h, jobject surf) {
+    JNIEnv *env, jobject obj, jbyteArray jSrc, jint j_w, jint j_h, jint j_wordload,jobject surf) {
 
     const int w = j_w, h = j_h;
-
+    int workload=j_wordload;
     halide_set_error_handler(handler);
 
     unsigned char *src = (unsigned char *)env->GetByteArrayElements(jSrc, NULL);
@@ -94,20 +95,34 @@ JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
         dstBuf.min[0] = 0;
         dstBuf.min[1] = 0;
         dstBuf.elem_size = 1;
-
+        int cpuworkload=0;
         // Just copy over chrominance untouched
         memcpy(dst + w*h, src + w*h, (w*h)/2);
-
+        static Fusion::Fusions<> fusion(gaussinBlur_cpu,gaussinBlur_gpu,&srcBuf,&dstBuf);
         int64_t t1 = halide_current_time_ns();
-        halide_generated(&srcBuf, &dstBuf);
-
+        if(workload==100){
+            fusion.realizeCPU();
+        }
+        else if(workload==0){
+            fusion.realizeGPU();
+        }
+        else{
+            int cpuworkload=h*workload/100;
+            // LOGD("CPU Wordload: %d" ,cpuworkload);
+            fusion.realize(cpuworkload);
+        }
+        // gaussinBlur_cpu(&srcBuf, &dstBuf);
+        // fusion.realizeGPU();
+        // for(int i=0;i<(w*h)/2;i++){
+        //         dst[w*h+i]=125;
+        // }
         if (dstBuf.dev) {
             halide_copy_to_host(NULL, &dstBuf);
         }
 
         int64_t t2 = halide_current_time_ns();
         unsigned elapsed_us = (t2 - t1)/1000;
-
+	unsigned fps=1000000/elapsed_us;
 
         times[counter & 15] = elapsed_us;
         counter++;
@@ -115,7 +130,9 @@ JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
         for (int i = 1; i < 16; i++) {
             if (times[i] < min) min = times[i];
         }
-        LOGD("Time taken: %d (%d)", elapsed_us, min);
+        // LOGD("Time taken: %d (%d)", elapsed_us, min);
+        LOGD("FPS: %d" ,fps);
+        
     }
 
     ANativeWindow_unlockAndPost(win);

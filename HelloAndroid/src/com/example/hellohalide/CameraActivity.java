@@ -5,15 +5,21 @@ import android.os.Bundle;
 import android.hardware.Camera;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.view.SurfaceView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
+
 
 public class CameraActivity extends Activity {
+    public static int workload=100;
     private static final String TAG = "CameraActivity";
-
+    public SeekBar seekBar;
     private Camera camera;
     private CameraPreview preview;
     private SurfaceView filtered;
-
+	
     public static Camera getCameraInstance() {
         Camera c = null;
         try {
@@ -37,9 +43,33 @@ public class CameraActivity extends Activity {
         preview = new CameraPreview(this, filtered);
 
         FrameLayout layout = (FrameLayout) findViewById(R.id.camera_preview);
-        layout.addView(preview);
-        layout.addView(filtered);
-        filtered.setZOrderOnTop(true);
+		  LinearLayout  ll=(LinearLayout) findViewById(R.id.Linear);
+               seekBar=(SeekBar) findViewById(R.id.seekBar);
+               seekBar.setProgress(100);
+    layout.addView(preview);
+
+      layout.addView(filtered);
+      seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar,int progresValue,boolean fromUser){
+                workload=progresValue;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekbar){
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekbar){
+
+                // Toast.makeText(CameraActivity.this,"Worklad : "+workload,Toast.LENGTH_SHORT).show();
+            }
+      });
+	
+		
+       filtered.setZOrderMediaOverlay(true);
+	seekBar.bringToFront();
     }
 
     @Override

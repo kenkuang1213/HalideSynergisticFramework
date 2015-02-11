@@ -9,6 +9,10 @@ import android.view.Surface;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
+
 
 /** A basic Camera preview class */
 public class CameraPreview extends SurfaceView
@@ -23,7 +27,7 @@ public class CameraPreview extends SurfaceView
     static {
         System.loadLibrary("native");
     }
-    private static native void processFrame(byte[] src, int w, int h, Surface dst);
+    private static native void processFrame(byte[] src, int w, int h, int workload,Surface dst);
 
     public CameraPreview(Context context, SurfaceView filtered) {
         super(context);
@@ -42,8 +46,13 @@ public class CameraPreview extends SurfaceView
             return;
         }
         if (mFiltered.getHolder().getSurface().isValid()) {
+            // SeekBar seekBar= (SeekBar) findViewById(R.id.seekBar);
+            // CameraActivity.workload=seekBar.getProgress();
+            // int workload=0;
+              // Log.d(TAG, "Worklad : "+    CameraActivity.workload);
+            // Toast.makeText(CameraPreview.this,"Worklad : "+workload,Toast.LENGTH_SHORT).show();
             Camera.Size s = camera.getParameters().getPreviewSize();
-            processFrame(data, s.width, s.height, mFiltered.getHolder().getSurface());
+            processFrame(data, s.width, s.height, CameraActivity.workload,mFiltered.getHolder().getSurface());
         } else {
             Log.d(TAG, "Invalid Surface!");
         }

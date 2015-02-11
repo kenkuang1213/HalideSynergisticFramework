@@ -388,7 +388,7 @@ int Fusions<Args...>::realize(Args... args)
 //        realize(forward<Args>(args)...,CPUWorkload);
 
     buffer_t* cpuBuf=divBuffer(output,0,CPUWorkload);
-    buffer_t* gpuBuf=divBuffer(output,CPUWorkload+1,input->extent[1]);
+    buffer_t* gpuBuf=divBuffer(output,CPUWorkload,input->extent[1]);
     double _gputime;
 //        CPUWorkload=workload;
     thread gputThread(gpuThreadWithTime<args...>,gpuFunc,input,gpuBuf,&_gputime);
@@ -575,3 +575,4 @@ int Fusions<Args...>::testSize(Args... args)
 }
 }
 #endif // FUSION_H
+

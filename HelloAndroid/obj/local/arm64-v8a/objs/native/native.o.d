@@ -33,8 +33,15 @@ obj/local/arm64-v8a/objs/native/native.o: jni/native.cpp \
  /home/ken/tools/android-ndk-r10c/platforms/android-21/arch-arm64/usr/include/alloca.h \
  /home/ken/tools/android-ndk-r10c/platforms/android-21/arch-arm64/usr/include/strings.h \
  /home/ken/tools/android-ndk-r10c/platforms/android-21/arch-arm64/usr/include/memory.h \
- jni/halide_generated_arm64-v8a/halide_generated.h \
- jni/../../../include/HalideRuntime.h
+ jni/halide_generated_arm64-v8a/gaussinBlur_cpu.h \
+ jni/halide_generated_arm64-v8a/gaussinBlur_gpu.h \
+ /home/ken/src/Halide_Master/include/HalideRuntime.h jni/fusion.h \
+ /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/cmath \
+ /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
+ /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/utility \
+ /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/thread \
+ /home/ken/tools/android-ndk-r10c/platforms/android-21/arch-arm64/usr/include/assert.h \
+ jni/clock.h
 
 /home/ken/tools/android-ndk-r10c/platforms/android-21/arch-arm64/usr/include/jni.h:
 
@@ -104,6 +111,22 @@ obj/local/arm64-v8a/objs/native/native.o: jni/native.cpp \
 
 /home/ken/tools/android-ndk-r10c/platforms/android-21/arch-arm64/usr/include/memory.h:
 
-jni/halide_generated_arm64-v8a/halide_generated.h:
+jni/halide_generated_arm64-v8a/gaussinBlur_cpu.h:
 
-jni/../../../include/HalideRuntime.h:
+jni/halide_generated_arm64-v8a/gaussinBlur_gpu.h:
+
+/home/ken/src/Halide_Master/include/HalideRuntime.h:
+
+jni/fusion.h:
+
+/home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/cmath:
+
+/home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream:
+
+/home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/utility:
+
+/home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/thread:
+
+/home/ken/tools/android-ndk-r10c/platforms/android-21/arch-arm64/usr/include/assert.h:
+
+jni/clock.h:
