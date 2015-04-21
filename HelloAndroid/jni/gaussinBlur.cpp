@@ -44,33 +44,37 @@ int main()
     Expr constOfMask("constOfMask");
     constOfMask=273;
 
-    RDom r(mask),rx(0,3,0,3);
+    RDom r(mask),rx(0,4,0,4);
 
-    // Func output("output"),clamped("clamped"),floating("floating"),blur("blur");
+    Func output("output"),clamped("clamped"),floating("floating"),blur("blur"),blur_x,blur_y;
 
     Var x("x"),y("y");
 
-    // clamped(x,y)=input(clamp(x,0,input.width()-1),clamp(y,0,input.height()-1));
-    // floating(x, y) = cast<float>(clamped(x, y));
-    // // blur(x, y) =sum((mask(r.x, r.y) * floating(x + r.x - 2, y + r.y - 2)))/constOfMask;
-    //  blur(x, y) =sum(floating(x + rx.x - 1, y + rx.y - 1))/9;
-    // // blur(x,y)=blur(x,y)/constOfMask;
-    // output(x, y) = cast<uint8_t>(blur(x, y));
-    // // output(x,y)=cast<uint8_t>(100);
+    clamped(x,y)=input(clamp(x,0,input.width()-1),clamp(y,0,input.height()-1));
 
-
-     Func output("RobersOp"),Gx,Gy,gray;
-     Expr value=cast<float>(input(x,y));
-    gray(x,y)=value;
+   blur_x(x,y)=(clamped(x-1, y) + clamped(x, y) + clamped(x+1, y))/3;
+     output(x, y) =(blur_x(x, y-1) + blur_x(x, y+1) + blur_x(x, y-1))/3;
+    // blur(x,y)=blur(x,y)/constOfMask;
+    // output(x, y) = cast<uint8_t>(blur_y(x, y));
  
-    // Set a boundary condition
-    Func clamped;
-    clamped(x, y) = gray(clamp(x, 0, input.width()-1), clamp(y, 0, input.height()-1));
-    //
-    //algorithm part
-    Gx(x,y)=(clamped(x,y)-clamped(x+1,y+1))*(clamped(x,y)-clamped(x+1,y+1));
-    Gy(x,y)=(clamped(x+1,y)-clamped(x,y+1))*(clamped(x+1,y)-clamped(x,y+1));        
-    output(x,y)=select(((Gx(x,y)+Gy(x,y))>cast<float>(144)),cast<uint8_t>(0),cast<uint8_t>(255));
+
+
+     Func Gx,Gy,gray;
+    //  Expr value=cast<float>(input(x,y));
+    // gray(x,y)=value;
+ 
+    // // Set a boundary condition
+    // Func clamped;
+    // clamped(x, y) = gray(clamp(x, 0, input.width()-1), clamp(y, 0, input.height()-1));
+    // //
+    // //algorithm part
+    // Gx(x,y)=(clamped(x,y)-clamped(x+1,y+1))*(clamped(x,y)-clamped(x+1,y+1));
+    // Gy(x,y)=(clamped(x+1,y)-clamped(x,y+1))*(clamped(x+1,y)-clamped(x,y+1));        
+
+    // Gx(x,y)=(blur(x,y)-blur(x+1,y+1))*(blur(x,y)-blur(x+1,y+1));
+    // Gy(x,y)=(blur(x+1,y)-blur(x,y+1))*(blur(x+1,y)-blur(x,y+1));      
+
+    // output(x,y)=select(((Gx(x,y)+Gy(x,y))>cast<float>(169)),cast<uint8_t>(0),cast<uint8_t>(blur(x,y)));
 
 
     AUTOTUNE_HOOK(output);
@@ -82,10 +86,13 @@ int main()
     {
         if(target.os==Target::Android)
         {
-//            clamped.compute_root().gpu_tile(x, y, 4, 4, GPU_Default);
-//            floating.compute_root().gpu_tile(x, y, 4, 4, GPU_Default);
-           // blur.compute_root().vectorize(x,8).gpu_tile(x, y, 16 ,4, GPU_Default);
-            output.compute_root().gpu_tile(x, y, 16, 4, GPU_Default);
+           // clamped.compute_root().vectorize(x,8).gpu_tile(x, y, 4, 4, GPU_Default);
+           // floating.compute_root().gpu_tile(x, y, 16, 4, GPU_Default);
+           blur_x.compute_root().vectorize(x,8).gpu_tile(x, y, 16 ,4, GPU_Default);
+           // blur_y.compute_root().vectorize(x,8).gpu_tile(x, y, 16 ,8, GPU_Default);
+            // Gx.compute_root().vectorize(x,8).gpu_tile(x, y, 16 ,8, GPU_Default);
+            //  Gy.compute_root().vectorize(x,8).gpu_tile(x, y, 16 ,8, GPU_Default);
+            output.compute_root().vectorize(x,8).gpu_tile(x, y, 16, 8, GPU_Default);
         }
         else
         {
@@ -99,7 +106,7 @@ int main()
     }
     else
     {
-        Halide::Var _x0, _x2, _x4, _y5, _x6, _x8, _y9;
+        Halide::Var _x0, _x2, _x4, _y5, _x6, _x8, _y9,yi;
         // blur.split(x, x, _x0, 32)
         // .reorder(_x0, x, y)
         // .reorder_storage(x, y)
@@ -121,16 +128,10 @@ int main()
         // .parallel(y)
         // .compute_root()
         // ;
+        // blur_y.split(y, y, yi, 8).parallel(y).vectorize(x, 8);
+    blur_x.vectorize(x, 8).compute_root();
 
-        output
-        .split(x, x, _x8, 16)
-        .split(y, y, _y9, 8)
-        .reorder(_x8, x, _y9, y)
-        .reorder_storage(x, y)
-        .vectorize(_x8, 4)
-        .parallel(y)
-        .compute_root()
-        ;
+        output.parallel(y).vectorize(x, 8);
 
         output.compile_to_file("gaussinBlur_cpu", input, target);
     }

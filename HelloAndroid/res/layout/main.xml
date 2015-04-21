@@ -15,8 +15,25 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:id="@+id/seekBar"
-			android:max="101"
-			android:layout_gravity="bottom"/>
+		 android:max="101"
+		 android:layout_gravity="bottom"/>
+      <TextView 
+    android:id="@+id/mtextview"
+    android:layout_width="100px" 
+    android:textSize="32sp"
+    android:layout_height="wrap_content" 
+    android:textColor="#FF0000"
+    android:textStyle="bold|italic"
+    />
+    <CheckBox android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="auto"
+        android:textSize="32sp"
+        android:textColor="#FF0000"
+        android:layout_alignParentRight="true"
+        android:padding="100dip"
+        />
       </FrameLayout>
 	
 

@@ -12,28 +12,29 @@ import android.graphics.ImageFormat;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
-
+import android.widget.TextView;
 
 /** A basic Camera preview class */
 public class CameraPreview extends SurfaceView
     implements SurfaceHolder.Callback, Camera.PreviewCallback {
     private static final String TAG = "CameraPreview";
-
+    private TextView textView;
     private Camera mCamera;
     private SurfaceView mFiltered;
     private byte[] mPreviewData;
-
+    private int[] returnData;
     // Link to native Halide code
     static {
         System.loadLibrary("native");
     }
-    private static native void processFrame(byte[] src, int w, int h, int workload,Surface dst);
+    private static native void processFrame(byte[] src, int w, int h, int workload,int[] returnData,Surface dst);
 
     public CameraPreview(Context context, SurfaceView filtered) {
         super(context);
         mFiltered = filtered;
         mFiltered.getHolder().setFormat(ImageFormat.YV12);
         mPreviewData = null;
+        returnData=new int[2];
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
@@ -51,8 +52,15 @@ public class CameraPreview extends SurfaceView
             // int workload=0;
               // Log.d(TAG, "Worklad : "+    CameraActivity.workload);
             // Toast.makeText(CameraPreview.this,"Worklad : "+workload,Toast.LENGTH_SHORT).show();
+
             Camera.Size s = camera.getParameters().getPreviewSize();
-            processFrame(data, s.width, s.height, CameraActivity.workload,mFiltered.getHolder().getSurface());
+            if(!CameraActivity.autoChecked)
+                processFrame(data, s.width, s.height, CameraActivity.workload,returnData,mFiltered.getHolder().getSurface());
+            else{
+                processFrame(data, s.width, s.height, -1,returnData,mFiltered.getHolder().getSurface());
+                CameraActivity.seekBar.setProgress(returnData[1]);
+            }
+            CameraActivity.textView.setText(""+returnData[0]);
         } else {
             Log.d(TAG, "Invalid Surface!");
         }

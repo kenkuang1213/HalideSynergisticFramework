@@ -8,18 +8,27 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.view.SurfaceView;
 import android.widget.SeekBar;
+import android.widget.TextView;
+
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 
 public class CameraActivity extends Activity {
-    public static int workload=100;
+    public static int workload=0;
+    public static int FPS=0;
+    public static boolean autoChecked=false;
     private static final String TAG = "CameraActivity";
-    public SeekBar seekBar;
+    public static  SeekBar seekBar;
+    public static TextView textView;
+    private CheckBox checkBox;
     private Camera camera;
     private CameraPreview preview;
     private SurfaceView filtered;
-	
+
     public static Camera getCameraInstance() {
         Camera c = null;
         try {
@@ -43,13 +52,15 @@ public class CameraActivity extends Activity {
         preview = new CameraPreview(this, filtered);
 
         FrameLayout layout = (FrameLayout) findViewById(R.id.camera_preview);
-		  LinearLayout  ll=(LinearLayout) findViewById(R.id.Linear);
-               seekBar=(SeekBar) findViewById(R.id.seekBar);
-               seekBar.setProgress(100);
-    layout.addView(preview);
+        LinearLayout  ll=(LinearLayout) findViewById(R.id.Linear);
+        checkBox=(CheckBox) findViewById(R.id.checkbox);
+        textView=(TextView) findViewById(R.id.mtextview);
+        seekBar=(SeekBar) findViewById(R.id.seekBar);
+        seekBar.setProgress(workload);
+        layout.addView(preview);
 
-      layout.addView(filtered);
-      seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+        layout.addView(filtered);
+        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar,int progresValue,boolean fromUser){
@@ -65,11 +76,25 @@ public class CameraActivity extends Activity {
 
                 // Toast.makeText(CameraActivity.this,"Worklad : "+workload,Toast.LENGTH_SHORT).show();
             }
-      });
-	
-		
-       filtered.setZOrderMediaOverlay(true);
-	seekBar.bringToFront();
+        });
+        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked){
+                if(isChecked){
+                    seekBar.setEnabled(false);
+                    autoChecked=true;
+                }
+                else{
+                    seekBar.setEnabled(true);
+                    autoChecked=false;
+                }
+            }
+        });
+        // textView.setText("fuck");
+        checkBox.bringToFront();
+        textView.bringToFront();
+        filtered.setZOrderMediaOverlay(true);
+        seekBar.bringToFront();
     }
 
     @Override

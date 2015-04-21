@@ -20,5 +20,5 @@ typedef struct buffer_t {
 #ifdef __cplusplus
 extern "C"
 #endif
-int gaussinBlur_cpu(buffer_t *_input, buffer_t *_RobersOp) HALIDE_FUNCTION_ATTRS;
+int gaussinBlur_cpu(buffer_t *_input, buffer_t *_output) HALIDE_FUNCTION_ATTRS;
 #endif

@@ -8,11 +8,13 @@
 
 #include "gaussinBlur_cpu.h"
 #include "gaussinBlur_gpu.h"
+#include "sobel_cpu.h"
+#include "sobel_gpu.h"
 #include <HalideRuntime.h>
 #include "fusion.h"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,"halide_native",__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,"halide_native",__VA_ARGS__)
-
+#define  LOGA(...)  __android_log_print(ANDROID_LOG_ERROR,"fusion_analysis",__VA_ARGS__)
 #define DEBUG 1
 
 extern "C" void halide_set_error_handler(int (*handler)(void *user_context, const char *));
@@ -29,10 +31,15 @@ int handler(void *, const char *msg) {
 
 extern "C" {
 JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
-    JNIEnv *env, jobject obj, jbyteArray jSrc, jint j_w, jint j_h, jint j_wordload,jobject surf) {
+    JNIEnv *env, jobject obj, jbyteArray jSrc, jint j_w, jint j_h, jint j_workload,jintArray jreturnData,jobject surf) {
+
 
     const int w = j_w, h = j_h;
-    int workload=j_wordload;
+    
+    int *returnData=(int*)env->GetIntArrayElements(jreturnData,NULL);
+    int workload=j_workload;
+    static int count=0;
+    static int lastworkload=0;
     halide_set_error_handler(handler);
 
     unsigned char *src = (unsigned char *)env->GetByteArrayElements(jSrc, NULL);
@@ -72,6 +79,13 @@ JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
     static buffer_t srcBuf = {0};
     static buffer_t dstBuf = {0};
 
+    static buffer_t srcUBuf = {0};
+    static buffer_t dstUBuf = {0};
+
+    static buffer_t srcVBuf = {0};
+    static buffer_t dstVBuf = {0};
+
+
     if (dst) {
         srcBuf.host = (uint8_t *)src;
         srcBuf.host_dirty = true;
@@ -85,6 +99,32 @@ JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
         srcBuf.min[1] = 0;
         srcBuf.elem_size = 1;
 
+        srcUBuf.host = (uint8_t *)src+w*h;
+        srcUBuf.host_dirty = true;
+        srcUBuf.extent[0] = w/2;
+        srcUBuf.extent[1] = h/2;
+        srcUBuf.extent[2] = 0;
+        srcUBuf.extent[3] = 0;
+        srcUBuf.stride[0] = 1;
+        srcUBuf.stride[1] = w/2;
+        srcUBuf.min[0] = 0;
+        srcUBuf.min[1] = 0;
+        srcUBuf.elem_size = 1;
+
+
+        srcVBuf.host = (uint8_t *)src+w*h+w*h/4;
+        srcVBuf.host_dirty = true;
+        srcVBuf.extent[0] = w/2;
+        srcVBuf.extent[1] = h/2;
+        srcVBuf.extent[2] = 0;
+        srcVBuf.extent[3] = 0;
+        srcVBuf.stride[0] = 1;
+        srcVBuf.stride[1] = w/2;
+        srcVBuf.min[0] = 0;
+        srcVBuf.min[1] = 0;
+        srcVBuf.elem_size = 1;
+      
+
         dstBuf.host = dst;
         dstBuf.extent[0] = w;
         dstBuf.extent[1] = h;
@@ -95,34 +135,81 @@ JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
         dstBuf.min[0] = 0;
         dstBuf.min[1] = 0;
         dstBuf.elem_size = 1;
+
+        dstUBuf.host = dst+w*h;
+        dstUBuf.host_dirty = true;
+        dstUBuf.extent[0] = w/2;
+        dstUBuf.extent[1] = h/2;
+        dstUBuf.extent[2] = 0;
+        dstUBuf.extent[3] = 0;
+        dstUBuf.stride[0] = 2;
+        dstUBuf.stride[1] = w;
+        dstUBuf.min[0] = 0;
+        dstUBuf.min[1] = 0;
+        dstUBuf.elem_size = 1;
+
+      
+        dstVBuf.host = dst+w*h+1;
+        dstVBuf.host_dirty = true;
+        dstVBuf.extent[0] = w/2;
+        dstVBuf.extent[1] = h/2;
+        dstVBuf.extent[2] = 0;
+        dstVBuf.extent[3] = 0;
+        dstVBuf.stride[0] = 2;
+        dstVBuf.stride[1] = w;
+        dstVBuf.min[0] = 0;
+        dstVBuf.min[1] = 0;
+        dstVBuf.elem_size = 1;
+
+
         int cpuworkload=0;
         // Just copy over chrominance untouched
         memcpy(dst + w*h, src + w*h, (w*h)/2);
-        static Fusion::Fusions<> fusion(gaussinBlur_cpu,gaussinBlur_gpu,&srcBuf,&dstBuf);
+        // memcpy(dst , src , (w*h)+(w*h)/2);
+        // static Fusion::Fusions<> fusion(gaussinBlur_cpu,gaussinBlur_gpu,&srcBuf,&dstBuf);
+          static Fusion::Fusions<> fusionSobel(sobel_cpu,sobel_gpu,&srcBuf,&dstBuf);
+        // static Fusion::Fusions<> fusionU(gaussinBlur_cpu,gaussinBlur_gpu,&srcUBuf,&dstUBuf);
+        // static Fusion::Fusions<> fusionV(gaussinBlur_cpu,gaussinBlur_gpu,&srcVBuf,&dstVBuf);
         int64_t t1 = halide_current_time_ns();
         if(workload==100){
-            fusion.realizeCPU();
+          fusionSobel.realizeCPU();
+             // fusionU.realizeCPU();
+             // fusionV.realizeCPU();
         }
         else if(workload==0){
-            fusion.realizeGPU();
+            fusionSobel.realizeGPU();
+             // fusionU.realizeGPU();
+             // fusionV.realizeGPU();
+            // Use Halide GPU Function rather then fusion
+            // gaussinBlur_gpu(&srcBuf,&dstBuf);
+            //  halide_copy_to_host(NULL, &dstBuf);
         }
-        else{
+        else if(workload==-1){
+            // int tmp;
+            fusionSobel.autoRealize();
+            // returnData[1]=((double)tmp/(double)h)*(double)100;
+            // LOGD("Wordload: %d percentage" ,returnData[1]);
+        }
+        else {
             int cpuworkload=h*workload/100;
             // LOGD("CPU Wordload: %d" ,cpuworkload);
-            fusion.realize(cpuworkload);
+            fusionSobel.realizeWithStealing(cpuworkload);
+            // int UVcpuworkload=h*workload/200;
+            // fusionU.realize(UVcpuworkload);
+            //  fusionV.realize(UVcpuworkload);
         }
         // gaussinBlur_cpu(&srcBuf, &dstBuf);
         // fusion.realizeGPU();
         // for(int i=0;i<(w*h)/2;i++){
         //         dst[w*h+i]=125;
         // }
-        if (dstBuf.dev) {
-            halide_copy_to_host(NULL, &dstBuf);
-        }
+        // if (dstBuf.dev) {
+        //     halide_copy_to_host(NULL, &dstBuf);
+        // }
 
         int64_t t2 = halide_current_time_ns();
         unsigned elapsed_us = (t2 - t1)/1000;
-	unsigned fps=1000000/elapsed_us;
+        double fps=1000000.0/elapsed_us;
 
         times[counter & 15] = elapsed_us;
         counter++;
@@ -130,8 +217,19 @@ JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
         for (int i = 1; i < 16; i++) {
             if (times[i] < min) min = times[i];
         }
-        // LOGD("Time taken: %d (%d)", elapsed_us, min);
-        LOGD("FPS: %d" ,fps);
+
+        returnData[0]=(int)fps;
+        LOGD("FPS: %d" ,(int)fps);
+        if(count>50&&count<=550)
+            LOGA("FPS = %d",(int)fps);
+        if(lastworkload==workload)
+            count ++;
+        else{
+            lastworkload=workload;
+            count=0;
+        }
+
+
         
     }
 
