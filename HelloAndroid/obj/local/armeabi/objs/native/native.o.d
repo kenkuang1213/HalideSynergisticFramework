@@ -36,6 +36,8 @@ obj/local/armeabi/objs/native/native.o: jni/native.cpp \
  jni/halide_generated_armeabi/sobel_cpu.h \
  jni/halide_generated_armeabi/sobel_gpu.h \
  /home/ken/src/Halide_Master/include/HalideRuntime.h \
+ /home/ken/src/DevicesFusion/framework/include/StaticDispatch.h \
+ /home/ken/src/DevicesFusion/framework/include/clock.h \
  /home/ken/src/DevicesFusion/framework/include/fusion.h \
  /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/cmath \
  /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/iostream \
@@ -45,7 +47,6 @@ obj/local/armeabi/objs/native/native.o: jni/native.cpp \
  /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/mutex \
  /home/ken/src/DevicesFusion/framework/include/fusion_info.h \
  /home/ken/src/DevicesFusion/framework/include/internal.h \
- /home/ken/src/DevicesFusion/framework/include/clock.h \
  /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/sstream
 
 /home/ken/tools/android-ndk-r10c/platforms/android-19/arch-arm/usr/include/jni.h:
@@ -122,6 +123,10 @@ jni/halide_generated_armeabi/sobel_gpu.h:
 
 /home/ken/src/Halide_Master/include/HalideRuntime.h:
 
+/home/ken/src/DevicesFusion/framework/include/StaticDispatch.h:
+
+/home/ken/src/DevicesFusion/framework/include/clock.h:
+
 /home/ken/src/DevicesFusion/framework/include/fusion.h:
 
 /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/cmath:
@@ -139,7 +144,5 @@ jni/halide_generated_armeabi/sobel_gpu.h:
 /home/ken/src/DevicesFusion/framework/include/fusion_info.h:
 
 /home/ken/src/DevicesFusion/framework/include/internal.h:
-
-/home/ken/src/DevicesFusion/framework/include/clock.h:
 
 /home/ken/tools/android-ndk-r10c/sources/cxx-stl/gnu-libstdc++/4.9/include/sstream:

@@ -11,10 +11,10 @@
 #include "sobel_cpu.h"
 #include "sobel_gpu.h"
 #include <HalideRuntime.h>
-#include "fusion.h"
+#include "StaticDispatch.h"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,"halide_native",__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,"halide_native",__VA_ARGS__)
-#define  LOGA(...)  __android_log_print(ANDROID_LOG_ERROR,"fusion_analysis",__VA_ARGS__)
+#define  LOGA(...)  __android_log_print(ANDROID_LOG_DEBUG,"fusion_analysis",__VA_ARGS__)
 #define DEBUG 1
 
 extern "C" void halide_set_error_handler(int (*handler)(void *user_context, const char *));
@@ -167,7 +167,7 @@ JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
         memcpy(dst + w*h, src + w*h, (w*h)/2);
         // memcpy(dst , src , (w*h)+(w*h)/2);
         // static Fusion::Fusions<> fusion(gaussinBlur_cpu,gaussinBlur_gpu,&srcBuf,&dstBuf);
-          static Fusion::Fusions<> fusionSobel(sobel_cpu,sobel_gpu,&srcBuf,&dstBuf);
+        static Fusion::Static::StaticDispatch<> fusionSobel(sobel_cpu,sobel_gpu,&srcBuf,&dstBuf);
         // static Fusion::Fusions<> fusionU(gaussinBlur_cpu,gaussinBlur_gpu,&srcUBuf,&dstUBuf);
         // static Fusion::Fusions<> fusionV(gaussinBlur_cpu,gaussinBlur_gpu,&srcVBuf,&dstVBuf);
         int64_t t1 = halide_current_time_ns();
@@ -185,15 +185,16 @@ JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
             //  halide_copy_to_host(NULL, &dstBuf);
         }
         else if(workload==-1){
+            int cpuworkload=1200;
             // int tmp;
-            fusionSobel.autoRealize();
+            fusionSobel.realizeWithStealing(cpuworkload);
             // returnData[1]=((double)tmp/(double)h)*(double)100;
             // LOGD("Wordload: %d percentage" ,returnData[1]);
         }
         else {
             int cpuworkload=h*workload/100;
             // LOGD("CPU Wordload: %d" ,cpuworkload);
-            fusionSobel.realizeWithStealing(cpuworkload);
+            fusionSobel.realize(cpuworkload);
             // int UVcpuworkload=h*workload/200;
             // fusionU.realize(UVcpuworkload);
             //  fusionV.realize(UVcpuworkload);
@@ -220,6 +221,8 @@ JNIEXPORT void JNICALL Java_com_example_hellohalide_CameraPreview_processFrame(
 
         returnData[0]=(int)fps;
         LOGD("FPS: %d" ,(int)fps);
+        if(count==0)
+            LOGA("Wordload : %d",workload);
         if(count>50&&count<=550)
             LOGA("FPS = %d",(int)fps);
         if(lastworkload==workload)
