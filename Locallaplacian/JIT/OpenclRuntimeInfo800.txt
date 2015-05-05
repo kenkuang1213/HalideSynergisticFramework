@@ -1,2 +1,0 @@
-CPU Best Time:83961
-GPU Best Time:21764
