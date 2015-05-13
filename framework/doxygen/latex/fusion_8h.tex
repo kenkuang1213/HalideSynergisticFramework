@@ -1,0 +1,92 @@
+\hypertarget{fusion_8h}{\section{fusion.\-h File Reference}
+\label{fusion_8h}\index{fusion.\-h@{fusion.\-h}}
+}
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+{\ttfamily \#include $<$cmath$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$utility$>$}\\*
+{\ttfamily \#include $<$thread$>$}\\*
+{\ttfamily \#include $<$assert.\-h$>$}\\*
+{\ttfamily \#include $<$string$>$}\\*
+{\ttfamily \#include $<$mutex$>$}\\*
+{\ttfamily \#include \char`\"{}fusion\-\_\-info.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}internal.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}clock.\-h\char`\"{}}\\*
+Include dependency graph for fusion.\-h\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{fusion_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=289pt]{fusion_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structbuffer__t}{buffer\-\_\-t}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespace_fusion}{Fusion}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{fusion_8h_a2bca21209e0c048138ca68de82240740}{W\-O\-R\-K\-L\-O\-A\-D\-\_\-\-T\-H\-R\-E\-S\-H\-O\-U\-L\-D}~1.\-0
+\item 
+\#define \hyperlink{fusion_8h_aa482ffee6eeb009f59fa394d256191aa}{fusion\-\_\-printf}(...)~printf(\char`\"{}\%s\textbackslash{}n\char`\"{},\-\_\-\-\_\-\-V\-A\-\_\-\-A\-R\-G\-S\-\_\-\-\_\- );
+\item 
+\#define \hyperlink{fusion_8h_addf06f0401b4fbc53e7097b4fd536a8b}{F\-U\-S\-I\-O\-N\-\_\-\-H}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structbuffer__t}{buffer\-\_\-t} \hyperlink{fusion_8h_aebe399a52d3e6b4c16909f8216198044}{buffer\-\_\-t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{fusion_8h_a698f0ce388c5fcbbc63ecb696e5b4b97}{halide\-\_\-copy\-\_\-to\-\_\-host} (void $\ast$user\-\_\-context, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$buf)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{fusion_8h_addf06f0401b4fbc53e7097b4fd536a8b}{\index{fusion.\-h@{fusion.\-h}!F\-U\-S\-I\-O\-N\-\_\-\-H@{F\-U\-S\-I\-O\-N\-\_\-\-H}}
+\index{F\-U\-S\-I\-O\-N\-\_\-\-H@{F\-U\-S\-I\-O\-N\-\_\-\-H}!fusion.h@{fusion.\-h}}
+\subsubsection[{F\-U\-S\-I\-O\-N\-\_\-\-H}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\-U\-S\-I\-O\-N\-\_\-\-H}}\label{fusion_8h_addf06f0401b4fbc53e7097b4fd536a8b}
+\hypertarget{fusion_8h_aa482ffee6eeb009f59fa394d256191aa}{\index{fusion.\-h@{fusion.\-h}!fusion\-\_\-printf@{fusion\-\_\-printf}}
+\index{fusion\-\_\-printf@{fusion\-\_\-printf}!fusion.h@{fusion.\-h}}
+\subsubsection[{fusion\-\_\-printf}]{\setlength{\rightskip}{0pt plus 5cm}\#define fusion\-\_\-printf(
+\begin{DoxyParamCaption}
+\item[{}]{...}
+\end{DoxyParamCaption}
+)~printf(\char`\"{}\%s\textbackslash{}n\char`\"{},\-\_\-\-\_\-\-V\-A\-\_\-\-A\-R\-G\-S\-\_\-\-\_\- );}}\label{fusion_8h_aa482ffee6eeb009f59fa394d256191aa}
+\hypertarget{fusion_8h_a2bca21209e0c048138ca68de82240740}{\index{fusion.\-h@{fusion.\-h}!W\-O\-R\-K\-L\-O\-A\-D\-\_\-\-T\-H\-R\-E\-S\-H\-O\-U\-L\-D@{W\-O\-R\-K\-L\-O\-A\-D\-\_\-\-T\-H\-R\-E\-S\-H\-O\-U\-L\-D}}
+\index{W\-O\-R\-K\-L\-O\-A\-D\-\_\-\-T\-H\-R\-E\-S\-H\-O\-U\-L\-D@{W\-O\-R\-K\-L\-O\-A\-D\-\_\-\-T\-H\-R\-E\-S\-H\-O\-U\-L\-D}!fusion.h@{fusion.\-h}}
+\subsubsection[{W\-O\-R\-K\-L\-O\-A\-D\-\_\-\-T\-H\-R\-E\-S\-H\-O\-U\-L\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\-O\-R\-K\-L\-O\-A\-D\-\_\-\-T\-H\-R\-E\-S\-H\-O\-U\-L\-D~1.\-0}}\label{fusion_8h_a2bca21209e0c048138ca68de82240740}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{fusion_8h_aebe399a52d3e6b4c16909f8216198044}{\index{fusion.\-h@{fusion.\-h}!buffer\-\_\-t@{buffer\-\_\-t}}
+\index{buffer\-\_\-t@{buffer\-\_\-t}!fusion.h@{fusion.\-h}}
+\subsubsection[{buffer\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf buffer\-\_\-t}  {\bf buffer\-\_\-t}}}\label{fusion_8h_aebe399a52d3e6b4c16909f8216198044}
+
+
+\subsection{Function Documentation}
+\hypertarget{fusion_8h_a698f0ce388c5fcbbc63ecb696e5b4b97}{\index{fusion.\-h@{fusion.\-h}!halide\-\_\-copy\-\_\-to\-\_\-host@{halide\-\_\-copy\-\_\-to\-\_\-host}}
+\index{halide\-\_\-copy\-\_\-to\-\_\-host@{halide\-\_\-copy\-\_\-to\-\_\-host}!fusion.h@{fusion.\-h}}
+\subsubsection[{halide\-\_\-copy\-\_\-to\-\_\-host}]{\setlength{\rightskip}{0pt plus 5cm}int halide\-\_\-copy\-\_\-to\-\_\-host (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{user\-\_\-context, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{buf}
+\end{DoxyParamCaption}
+)}}\label{fusion_8h_a698f0ce388c5fcbbc63ecb696e5b4b97}

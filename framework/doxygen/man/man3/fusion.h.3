@@ -1,0 +1,91 @@
+.TH "fusion.h" 3 "Thu Apr 30 2015" "fusion" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+fusion.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <cmath>\fP
+.br
+\fC#include <iostream>\fP
+.br
+\fC#include <utility>\fP
+.br
+\fC#include <thread>\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+\fC#include <string>\fP
+.br
+\fC#include <mutex>\fP
+.br
+\fC#include 'fusion_info\&.h'\fP
+.br
+\fC#include 'internal\&.h'\fP
+.br
+\fC#include 'clock\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBbuffer_t\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBFusion\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBWORKLOAD_THRESHOULD\fP   1\&.0"
+.br
+.ti -1c
+.RI "#define \fBfusion_printf\fP(\&.\&.\&.)   printf('%s\\n',__VA_ARGS__ );"
+.br
+.ti -1c
+.RI "#define \fBFUSION_H\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct \fBbuffer_t\fP \fBbuffer_t\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBhalide_copy_to_host\fP (void *user_context, \fBbuffer_t\fP *buf)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define FUSION_H"
+
+.SS "#define fusion_printf(\&.\&.\&.)   printf('%s\\n',__VA_ARGS__ );"
+
+.SS "#define WORKLOAD_THRESHOULD   1\&.0"
+
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef struct \fBbuffer_t\fP  \fBbuffer_t\fP"
+
+.SH "Function Documentation"
+.PP 
+.SS "int halide_copy_to_host (void *user_context, \fBbuffer_t\fP *buf)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fusion from the source code\&.

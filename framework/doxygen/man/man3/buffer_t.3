@@ -1,0 +1,60 @@
+.TH "buffer_t" 3 "Thu Apr 30 2015" "fusion" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+buffer_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fusion\&.h>\fP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "uint64_t \fBdev\fP"
+.br
+.ti -1c
+.RI "uint8_t * \fBhost\fP"
+.br
+.ti -1c
+.RI "int32_t \fBextent\fP [4]"
+.br
+.ti -1c
+.RI "int32_t \fBstride\fP [4]"
+.br
+.ti -1c
+.RI "int32_t \fBmin\fP [4]"
+.br
+.ti -1c
+.RI "int32_t \fBelem_size\fP"
+.br
+.ti -1c
+.RI "bool \fBhost_dirty\fP"
+.br
+.ti -1c
+.RI "bool \fBdev_dirty\fP"
+.br
+.in -1c
+.SH "Member Data Documentation"
+.PP 
+.SS "uint64_t buffer_t::dev"
+
+.SS "bool buffer_t::dev_dirty"
+
+.SS "int32_t buffer_t::elem_size"
+
+.SS "int32_t buffer_t::extent"
+
+.SS "uint8_t * buffer_t::host"
+
+.SS "bool buffer_t::host_dirty"
+
+.SS "int32_t buffer_t::min"
+
+.SS "int32_t buffer_t::stride"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fusion from the source code\&.

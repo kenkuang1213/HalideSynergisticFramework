@@ -1,0 +1,221 @@
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch}{\section{Fusion\-:\-:Static\-:\-:Static\-Dispatch$<$ Args $>$ Class Template Reference}
+\label{class_fusion_1_1_static_1_1_static_dispatch}\index{Fusion\-::\-Static\-::\-Static\-Dispatch$<$ Args $>$@{Fusion\-::\-Static\-::\-Static\-Dispatch$<$ Args $>$}}
+}
+
+
+{\ttfamily \#include $<$Static\-Dispatch.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_fusion_1_1_static_1_1_static_dispatch_aec9bc8e9761fe734f393c2f45c38062c}{Static\-Dispatch} ()
+\item 
+\hyperlink{class_fusion_1_1_static_1_1_static_dispatch_a5cfebb05577106e1d07d643df71ffdae}{Static\-Dispatch} (function$<$ int(Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$)$>$ \-\_\-cpu\-Func, function$<$ int(Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$)$>$ \-\_\-gpu\-Func)
+\item 
+\hyperlink{class_fusion_1_1_static_1_1_static_dispatch_a3dd9cbf018bc5cb2bd79a18535c59247}{Static\-Dispatch} (function$<$ int(Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$)$>$ \-\_\-cpu\-Func, function$<$ int(Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$)$>$ \-\_\-gpu\-Func, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$\-\_\-input)
+\item 
+\hyperlink{class_fusion_1_1_static_1_1_static_dispatch_a2149402c6452471ae5652cace75b3de0}{Static\-Dispatch} (function$<$ int(Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$)$>$ \-\_\-cpu\-Func, function$<$ int(Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$)$>$ \-\_\-gpu\-Func, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$\-\_\-input, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$\-\_\-output)
+\item 
+int \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_ac74fd593ecfdd0c17cd3efb057a23601}{realize\-C\-P\-U} (Args...)
+\item 
+int \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_a58ebbf76aad64618f27a051393cf06ac}{realize\-G\-P\-U} (Args...)
+\item 
+int \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_a5242c852017c8bff8e2758da82fdfcdc}{realize\-C\-P\-U} (Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$\-\_\-output)
+\item 
+int \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_aa49de8865a4152db390e546dd17690a5}{realize\-G\-P\-U} (Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$\-\_\-output)
+\item 
+int \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_ad778f6d90895d75b920b173e2331d193}{realize\-With\-Stealing} (Args...\-args, int s)
+\item 
+void \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_ab82336c566e180be617f49c708cdf7f0}{set\-Input} (\hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$\-\_\-input)
+\item 
+void \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_a7c3cb7fa73040dbe2cfcbc3038119e48}{set\-Output} (\hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$\-\_\-output)
+\item 
+int \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_ae167b1f550c4cc5260834109de6e5797}{realize} (Args..., int s)
+\item 
+int \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_a4756d0081a1b0211d8f977a7b3aae110}{realize} (Args..., int s, int kernal\-Size)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+mutex $\ast$ \hyperlink{class_fusion_1_1_static_1_1_static_dispatch_adcf07c56b063db9d5aaa8eed6107d4b5}{table\-\_\-mutex}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_aec9bc8e9761fe734f393c2f45c38062c}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!Static\-Dispatch@{Static\-Dispatch}}
+\index{Static\-Dispatch@{Static\-Dispatch}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{Static\-Dispatch}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::{\bf Static\-Dispatch} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fusion_1_1_static_1_1_static_dispatch_aec9bc8e9761fe734f393c2f45c38062c}
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_a5cfebb05577106e1d07d643df71ffdae}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!Static\-Dispatch@{Static\-Dispatch}}
+\index{Static\-Dispatch@{Static\-Dispatch}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{Static\-Dispatch}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::{\bf Static\-Dispatch} (
+\begin{DoxyParamCaption}
+\item[{function$<$ int(Args..., {\bf buffer\-\_\-t} $\ast$, {\bf buffer\-\_\-t} $\ast$)$>$}]{\-\_\-cpu\-Func, }
+\item[{function$<$ int(Args..., {\bf buffer\-\_\-t} $\ast$, {\bf buffer\-\_\-t} $\ast$)$>$}]{\-\_\-gpu\-Func}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fusion_1_1_static_1_1_static_dispatch_a5cfebb05577106e1d07d643df71ffdae}
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_a3dd9cbf018bc5cb2bd79a18535c59247}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!Static\-Dispatch@{Static\-Dispatch}}
+\index{Static\-Dispatch@{Static\-Dispatch}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{Static\-Dispatch}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::{\bf Static\-Dispatch} (
+\begin{DoxyParamCaption}
+\item[{function$<$ int(Args..., {\bf buffer\-\_\-t} $\ast$, {\bf buffer\-\_\-t} $\ast$)$>$}]{\-\_\-cpu\-Func, }
+\item[{function$<$ int(Args..., {\bf buffer\-\_\-t} $\ast$, {\bf buffer\-\_\-t} $\ast$)$>$}]{\-\_\-gpu\-Func, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{\-\_\-input}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fusion_1_1_static_1_1_static_dispatch_a3dd9cbf018bc5cb2bd79a18535c59247}
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_a2149402c6452471ae5652cace75b3de0}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!Static\-Dispatch@{Static\-Dispatch}}
+\index{Static\-Dispatch@{Static\-Dispatch}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{Static\-Dispatch}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::{\bf Static\-Dispatch} (
+\begin{DoxyParamCaption}
+\item[{function$<$ int(Args..., {\bf buffer\-\_\-t} $\ast$, {\bf buffer\-\_\-t} $\ast$)$>$}]{\-\_\-cpu\-Func, }
+\item[{function$<$ int(Args..., {\bf buffer\-\_\-t} $\ast$, {\bf buffer\-\_\-t} $\ast$)$>$}]{\-\_\-gpu\-Func, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{\-\_\-input, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{\-\_\-output}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fusion_1_1_static_1_1_static_dispatch_a2149402c6452471ae5652cace75b3de0}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_ae167b1f550c4cc5260834109de6e5797}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!realize@{realize}}
+\index{realize@{realize}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{realize}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ int {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::realize (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args, }
+\item[{int}]{s}
+\end{DoxyParamCaption}
+)}}\label{class_fusion_1_1_static_1_1_static_dispatch_ae167b1f550c4cc5260834109de6e5797}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_fusion_1_1_static_1_1_static_dispatch_ae167b1f550c4cc5260834109de6e5797_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_a4756d0081a1b0211d8f977a7b3aae110}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!realize@{realize}}
+\index{realize@{realize}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{realize}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ int {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::realize (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args, }
+\item[{int}]{s, }
+\item[{int}]{kernal\-Size}
+\end{DoxyParamCaption}
+)}}\label{class_fusion_1_1_static_1_1_static_dispatch_a4756d0081a1b0211d8f977a7b3aae110}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_fusion_1_1_static_1_1_static_dispatch_a4756d0081a1b0211d8f977a7b3aae110_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_ac74fd593ecfdd0c17cd3efb057a23601}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!realize\-C\-P\-U@{realize\-C\-P\-U}}
+\index{realize\-C\-P\-U@{realize\-C\-P\-U}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{realize\-C\-P\-U}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ int {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::realize\-C\-P\-U (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args}
+\end{DoxyParamCaption}
+)}}\label{class_fusion_1_1_static_1_1_static_dispatch_ac74fd593ecfdd0c17cd3efb057a23601}
+For using C\-P\-U only \hypertarget{class_fusion_1_1_static_1_1_static_dispatch_a5242c852017c8bff8e2758da82fdfcdc}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!realize\-C\-P\-U@{realize\-C\-P\-U}}
+\index{realize\-C\-P\-U@{realize\-C\-P\-U}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{realize\-C\-P\-U}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ int {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::realize\-C\-P\-U (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{\-\_\-output}
+\end{DoxyParamCaption}
+)}}\label{class_fusion_1_1_static_1_1_static_dispatch_a5242c852017c8bff8e2758da82fdfcdc}
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_a58ebbf76aad64618f27a051393cf06ac}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!realize\-G\-P\-U@{realize\-G\-P\-U}}
+\index{realize\-G\-P\-U@{realize\-G\-P\-U}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{realize\-G\-P\-U}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ int {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::realize\-G\-P\-U (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args}
+\end{DoxyParamCaption}
+)}}\label{class_fusion_1_1_static_1_1_static_dispatch_a58ebbf76aad64618f27a051393cf06ac}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_fusion_1_1_static_1_1_static_dispatch_a58ebbf76aad64618f27a051393cf06ac_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_aa49de8865a4152db390e546dd17690a5}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!realize\-G\-P\-U@{realize\-G\-P\-U}}
+\index{realize\-G\-P\-U@{realize\-G\-P\-U}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{realize\-G\-P\-U}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ int {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::realize\-G\-P\-U (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{\-\_\-output}
+\end{DoxyParamCaption}
+)}}\label{class_fusion_1_1_static_1_1_static_dispatch_aa49de8865a4152db390e546dd17690a5}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_fusion_1_1_static_1_1_static_dispatch_aa49de8865a4152db390e546dd17690a5_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_ad778f6d90895d75b920b173e2331d193}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!realize\-With\-Stealing@{realize\-With\-Stealing}}
+\index{realize\-With\-Stealing@{realize\-With\-Stealing}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{realize\-With\-Stealing}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ int {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::realize\-With\-Stealing (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args, }
+\item[{int}]{s}
+\end{DoxyParamCaption}
+)}}\label{class_fusion_1_1_static_1_1_static_dispatch_ad778f6d90895d75b920b173e2331d193}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_fusion_1_1_static_1_1_static_dispatch_ad778f6d90895d75b920b173e2331d193_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_ab82336c566e180be617f49c708cdf7f0}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!set\-Input@{set\-Input}}
+\index{set\-Input@{set\-Input}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{set\-Input}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ void {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::set\-Input (
+\begin{DoxyParamCaption}
+\item[{{\bf buffer\-\_\-t} $\ast$}]{\-\_\-input}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fusion_1_1_static_1_1_static_dispatch_ab82336c566e180be617f49c708cdf7f0}
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_a7c3cb7fa73040dbe2cfcbc3038119e48}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!set\-Output@{set\-Output}}
+\index{set\-Output@{set\-Output}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{set\-Output}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ void {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::set\-Output (
+\begin{DoxyParamCaption}
+\item[{{\bf buffer\-\_\-t} $\ast$}]{\-\_\-output}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_fusion_1_1_static_1_1_static_dispatch_a7c3cb7fa73040dbe2cfcbc3038119e48}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_fusion_1_1_static_1_1_static_dispatch_adcf07c56b063db9d5aaa8eed6107d4b5}{\index{Fusion\-::\-Static\-::\-Static\-Dispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}!table\-\_\-mutex@{table\-\_\-mutex}}
+\index{table\-\_\-mutex@{table\-\_\-mutex}!Fusion::Static::StaticDispatch@{Fusion\-::\-Static\-::\-Static\-Dispatch}}
+\subsubsection[{table\-\_\-mutex}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ mutex$\ast$ {\bf Fusion\-::\-Static\-::\-Static\-Dispatch}$<$ Args $>$\-::table\-\_\-mutex}}\label{class_fusion_1_1_static_1_1_static_dispatch_adcf07c56b063db9d5aaa8eed6107d4b5}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{_static_dispatch_8h}{Static\-Dispatch.\-h}\end{DoxyCompactItemize}

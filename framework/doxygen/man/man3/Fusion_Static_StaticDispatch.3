@@ -1,0 +1,98 @@
+.TH "Fusion::Static::StaticDispatch< Args >" 3 "Thu Apr 30 2015" "fusion" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Fusion::Static::StaticDispatch< Args > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <StaticDispatch\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStaticDispatch\fP ()"
+.br
+.ti -1c
+.RI "\fBStaticDispatch\fP (function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> _cpuFunc, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> _gpuFunc)"
+.br
+.ti -1c
+.RI "\fBStaticDispatch\fP (function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> _cpuFunc, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> _gpuFunc, \fBbuffer_t\fP *_input)"
+.br
+.ti -1c
+.RI "\fBStaticDispatch\fP (function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> _cpuFunc, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> _gpuFunc, \fBbuffer_t\fP *_input, \fBbuffer_t\fP *_output)"
+.br
+.ti -1c
+.RI "int \fBrealizeCPU\fP (Args\&.\&.\&.)"
+.br
+.ti -1c
+.RI "int \fBrealizeGPU\fP (Args\&.\&.\&.)"
+.br
+.ti -1c
+.RI "int \fBrealizeCPU\fP (Args\&.\&.\&., \fBbuffer_t\fP *_output)"
+.br
+.ti -1c
+.RI "int \fBrealizeGPU\fP (Args\&.\&.\&., \fBbuffer_t\fP *_output)"
+.br
+.ti -1c
+.RI "int \fBrealizeWithStealing\fP (Args\&.\&.\&.args, int s)"
+.br
+.ti -1c
+.RI "void \fBsetInput\fP (\fBbuffer_t\fP *_input)"
+.br
+.ti -1c
+.RI "void \fBsetOutput\fP (\fBbuffer_t\fP *_output)"
+.br
+.ti -1c
+.RI "int \fBrealize\fP (Args\&.\&.\&., int s)"
+.br
+.ti -1c
+.RI "int \fBrealize\fP (Args\&.\&.\&., int s, int kernalSize)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "mutex * \fBtable_mutex\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename\&.\&.\&. Args> \fBFusion::Static::StaticDispatch\fP< Args >::\fBStaticDispatch\fP ()\fC [inline]\fP"
+
+.SS "template<typename\&.\&.\&. Args> \fBFusion::Static::StaticDispatch\fP< Args >::\fBStaticDispatch\fP (function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)>_cpuFunc, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)>_gpuFunc)\fC [inline]\fP"
+
+.SS "template<typename\&.\&.\&. Args> \fBFusion::Static::StaticDispatch\fP< Args >::\fBStaticDispatch\fP (function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)>_cpuFunc, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)>_gpuFunc, \fBbuffer_t\fP *_input)\fC [inline]\fP"
+
+.SS "template<typename\&.\&.\&. Args> \fBFusion::Static::StaticDispatch\fP< Args >::\fBStaticDispatch\fP (function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)>_cpuFunc, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)>_gpuFunc, \fBbuffer_t\fP *_input, \fBbuffer_t\fP *_output)\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename\&.\&.\&. Args> int \fBFusion::Static::StaticDispatch\fP< Args >::realize (Args\&.\&.\&.args, ints)"
+
+.SS "template<typename\&.\&.\&. Args> int \fBFusion::Static::StaticDispatch\fP< Args >::realize (Args\&.\&.\&.args, ints, intkernalSize)"
+
+.SS "template<typename\&.\&.\&. Args> int \fBFusion::Static::StaticDispatch\fP< Args >::realizeCPU (Args\&.\&.\&.args)"
+For using CPU only 
+.SS "template<typename\&.\&.\&. Args> int \fBFusion::Static::StaticDispatch\fP< Args >::realizeCPU (Args\&.\&.\&.args, \fBbuffer_t\fP *_output)"
+
+.SS "template<typename\&.\&.\&. Args> int \fBFusion::Static::StaticDispatch\fP< Args >::realizeGPU (Args\&.\&.\&.args)"
+
+.SS "template<typename\&.\&.\&. Args> int \fBFusion::Static::StaticDispatch\fP< Args >::realizeGPU (Args\&.\&.\&.args, \fBbuffer_t\fP *_output)"
+
+.SS "template<typename\&.\&.\&. Args> int \fBFusion::Static::StaticDispatch\fP< Args >::realizeWithStealing (Args\&.\&.\&.args, ints)"
+
+.SS "template<typename\&.\&.\&. Args> void \fBFusion::Static::StaticDispatch\fP< Args >::setInput (\fBbuffer_t\fP *_input)\fC [inline]\fP"
+
+.SS "template<typename\&.\&.\&. Args> void \fBFusion::Static::StaticDispatch\fP< Args >::setOutput (\fBbuffer_t\fP *_output)\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename\&.\&.\&. Args> mutex* \fBFusion::Static::StaticDispatch\fP< Args >::table_mutex"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fusion from the source code\&.

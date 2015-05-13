@@ -1,0 +1,7 @@
+/home/ken/src/DevicesFusion/framework/include/StaticDispatch.h:10: warning: The following parameters of Fusion::Static::gpuStealing(Args...args, function< int(Args..., buffer_t *, buffer_t *)> func, buffer_t *input, buffer_t *cpuBuf, buffer_t *gpuBuf, status table[], int offset, mutex *table_mutex) are not documented:
+  parameter 'input'
+  parameter 'cpuBuf'
+  parameter 'gpuBuf'
+  parameter 'table'
+  parameter 'offset'
+  parameter 'table_mutex'

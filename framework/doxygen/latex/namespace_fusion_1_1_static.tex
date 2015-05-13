@@ -1,0 +1,80 @@
+\hypertarget{namespace_fusion_1_1_static}{\section{Fusion\-:\-:Static Namespace Reference}
+\label{namespace_fusion_1_1_static}\index{Fusion\-::\-Static@{Fusion\-::\-Static}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_fusion_1_1_static_1_1_static_dispatch}{Static\-Dispatch}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename... Args$>$ }\\void \hyperlink{namespace_fusion_1_1_static_a4dda28311f1977091df5d7adb5aec742}{gpu\-Stealing} (Args...\-args, function$<$ int(Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$)$>$ func, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$input, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$cpu\-Buf, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$gpu\-Buf, \hyperlink{fusion__info_8h_a015eb90e0de9f16e87bd149d4b9ce959}{status} table\mbox{[}$\,$\mbox{]}, int offset, mutex $\ast$table\-\_\-mutex)
+\begin{DoxyCompactList}\small\item\em This Function is a thread function for \hyperlink{namespace_fusion_1_1_static}{Static} execution way with Stealing. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename... Args$>$ }\\void \hyperlink{namespace_fusion_1_1_static_a36302361627ccb126b6aeb0efa6d3ab2}{gpu\-Thread} (Args...\-args, function$<$ int(Args..., \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$)$>$ func, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$input, \hyperlink{structbuffer__t}{buffer\-\_\-t} $\ast$output)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{namespace_fusion_1_1_static_a4dda28311f1977091df5d7adb5aec742}{\index{Fusion\-::\-Static@{Fusion\-::\-Static}!gpu\-Stealing@{gpu\-Stealing}}
+\index{gpu\-Stealing@{gpu\-Stealing}!Fusion::Static@{Fusion\-::\-Static}}
+\subsubsection[{gpu\-Stealing}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ void Fusion\-::\-Static\-::gpu\-Stealing (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args, }
+\item[{function$<$ int(Args..., {\bf buffer\-\_\-t} $\ast$, {\bf buffer\-\_\-t} $\ast$)$>$}]{func, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{input, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{cpu\-Buf, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{gpu\-Buf, }
+\item[{{\bf status}}]{table\mbox{[}$\,$\mbox{]}, }
+\item[{int}]{offset, }
+\item[{mutex $\ast$}]{table\-\_\-mutex}
+\end{DoxyParamCaption}
+)}}\label{namespace_fusion_1_1_static_a4dda28311f1977091df5d7adb5aec742}
+
+
+This Function is a thread function for \hyperlink{namespace_fusion_1_1_static}{Static} execution way with Stealing. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & Args arguments for Halide function. \\
+\hline
+{\em func} & function$<$int(\-Args...,buffer\-\_\-t$\ast$,buffer\-\_\-t$\ast$)$>$ Halide function \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+null
+\end{DoxyReturn}
+This Function is a thread function for \hyperlink{namespace_fusion_1_1_static}{Static} execution way with Stealing. G\-P\-U will execute the target workload first.\-After that ,G\-P\-U will check the table, if there are still blocks which have not been execute, G\-P\-U will help to execute the block. 
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespace_fusion_1_1_static_a4dda28311f1977091df5d7adb5aec742_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{namespace_fusion_1_1_static_a36302361627ccb126b6aeb0efa6d3ab2}{\index{Fusion\-::\-Static@{Fusion\-::\-Static}!gpu\-Thread@{gpu\-Thread}}
+\index{gpu\-Thread@{gpu\-Thread}!Fusion::Static@{Fusion\-::\-Static}}
+\subsubsection[{gpu\-Thread}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename... Args$>$ void Fusion\-::\-Static\-::gpu\-Thread (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args, }
+\item[{function$<$ int(Args..., {\bf buffer\-\_\-t} $\ast$, {\bf buffer\-\_\-t} $\ast$)$>$}]{func, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{input, }
+\item[{{\bf buffer\-\_\-t} $\ast$}]{output}
+\end{DoxyParamCaption}
+)}}\label{namespace_fusion_1_1_static_a36302361627ccb126b6aeb0efa6d3ab2}
+This Function is a thread for \hyperlink{namespace_fusion_1_1_static}{Static} execution way W\-I\-T\-H\-O\-U\-T stealing. 
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespace_fusion_1_1_static_a36302361627ccb126b6aeb0efa6d3ab2_cgraph}
+\end{center}
+\end{figure}
+
+

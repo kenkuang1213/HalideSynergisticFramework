@@ -1,0 +1,51 @@
+.TH "Fusion::Static" 3 "Thu Apr 30 2015" "fusion" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Fusion::Static \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBStaticDispatch\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename\&.\&.\&. Args> void \fBgpuStealing\fP (Args\&.\&.\&.args, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> func, \fBbuffer_t\fP *input, \fBbuffer_t\fP *cpuBuf, \fBbuffer_t\fP *gpuBuf, \fBstatus\fP table[], int offset, mutex *table_mutex)"
+.br
+.RI "\fIThis Function is a thread function for \fBStatic\fP execution way with Stealing\&. \fP"
+.ti -1c
+.RI "template<typename\&.\&.\&. Args> void \fBgpuThread\fP (Args\&.\&.\&.args, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> func, \fBbuffer_t\fP *input, \fBbuffer_t\fP *output)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "template<typename\&.\&.\&. Args> void Fusion::Static::gpuStealing (Args\&.\&.\&.args, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)>func, \fBbuffer_t\fP *input, \fBbuffer_t\fP *cpuBuf, \fBbuffer_t\fP *gpuBuf, \fBstatus\fPtable[], intoffset, mutex *table_mutex)"
+
+.PP
+This Function is a thread function for \fBStatic\fP execution way with Stealing\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIargs\fP Args arguments for Halide function\&. 
+.br
+\fIfunc\fP function<int(Args\&.\&.\&.,buffer_t*,buffer_t*)> Halide function 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+null
+.RE
+.PP
+This Function is a thread function for \fBStatic\fP execution way with Stealing\&. GPU will execute the target workload first\&.After that ,GPU will check the table, if there are still blocks which have not been execute, GPU will help to execute the block\&. 
+.SS "template<typename\&.\&.\&. Args> void Fusion::Static::gpuThread (Args\&.\&.\&.args, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)>func, \fBbuffer_t\fP *input, \fBbuffer_t\fP *output)"
+This Function is a thread for \fBStatic\fP execution way WITHOUT stealing\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fusion from the source code\&.

@@ -1,0 +1,44 @@
+.TH "StaticDispatch.h" 3 "Thu Apr 30 2015" "fusion" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+StaticDispatch.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'clock\&.h'\fP
+.br
+\fC#include 'fusion\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBFusion::Static::StaticDispatch< Args >\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBFusion\fP"
+.br
+.ti -1c
+.RI "\fBFusion::Static\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename\&.\&.\&. Args> void \fBFusion::Static::gpuStealing\fP (Args\&.\&.\&.args, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> func, \fBbuffer_t\fP *input, \fBbuffer_t\fP *cpuBuf, \fBbuffer_t\fP *gpuBuf, \fBstatus\fP table[], int offset, mutex *table_mutex)"
+.br
+.RI "\fIThis Function is a thread function for \fBStatic\fP execution way with Stealing\&. \fP"
+.ti -1c
+.RI "template<typename\&.\&.\&. Args> void \fBFusion::Static::gpuThread\fP (Args\&.\&.\&.args, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> func, \fBbuffer_t\fP *input, \fBbuffer_t\fP *output)"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fusion from the source code\&.

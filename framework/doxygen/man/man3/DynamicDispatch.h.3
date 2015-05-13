@@ -1,0 +1,38 @@
+.TH "DynamicDispatch.h" 3 "Thu Apr 30 2015" "fusion" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+DynamicDispatch.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'fusion\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBFusion::Dynamic::DynamicDispatch< Args >\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBFusion\fP"
+.br
+.ti -1c
+.RI "\fBFusion::Dynamic\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename\&.\&.\&. Args> void \fBFusion::Dynamic::workThread\fP (Args\&.\&.\&.args, function< int(Args\&.\&.\&., \fBbuffer_t\fP *, \fBbuffer_t\fP *)> func, \fBbuffer_t\fP *input, \fBbuffer_t\fP *output, \fBstatus\fP table[], int offset, mutex *table_mutex)"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fusion from the source code\&.
