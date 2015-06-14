@@ -37,7 +37,8 @@ typedef struct buffer_t
 #include "fusion_info.h"
 #include "internal.h"
 #include "clock.h"
-
+#include "HalideRuntime.h"
+#include "HalideRuntimeOpenCL.h"
 using namespace std;
 
 #ifdef ANDROID

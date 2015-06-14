@@ -1,5 +1,5 @@
-# OPENCL_LDFLAGS=-L/opt/AMDAPPSDK-3.0-0-Beta/lib/x86_64/sdk -lOpenCL
-OPENCL_LDFLAGS=-L$(AMDAPPSDKROOT)/lib/x86_64 -lOpenCL
+OPENCL_LDFLAGS=-L/opt/AMDAPPSDK-3.0-0-Beta/lib/x86_64/ -lOpenCL
+#OPENCL_LDFLAGS=-L$(AMDAPPSDKROOT)/lib/x86_64 -lOpenCL
 ANDROID_OPENCL_LDFALGS=-lOpenCL
 ANDROID_CXX?=arm-linux-androideabi-g++
 ANDROID_CXX_FLAGS=-llog -landroid -lOpenCL -I src/support -I src/fusion -I src/android

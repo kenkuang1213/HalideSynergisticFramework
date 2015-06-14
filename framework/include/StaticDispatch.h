@@ -2,8 +2,7 @@
 #define STATICDISPATCH_H
 #include "clock.h"
 #include "fusion.h"
-#include "HalideRuntime.h"
-#include "HalideRuntimeOpenCL.h"
+
 namespace Fusion {
 namespace Static {
 
@@ -122,120 +121,72 @@ private:
  *
  */
 
-template <typename ...Args>
+
 class StaticDispatch {
 public:
     StaticDispatch() {}
-    StaticDispatch(function<int(Args...,buffer_t*,buffer_t*)>  _cpuFunc,function<int(Args...,buffer_t*,buffer_t*)>  _gpuFunc) :cpuFunc(_cpuFunc),gpuFunc(_gpuFunc) {
-        input=NULL;
+    StaticDispatch(buffer_t* _input,buffer_t* _output):input(_input),output(_output) {
+#ifdef COMPILING_FOR_OPENCL
+        halide_opencl_set_device_type("gpu");
+#endif
+    }
+    StaticDispatch(buffer_t* _input):input(_input) {
         output=NULL;
-#if COMPILING_FOR_OPENCL
+#ifdef COMPILING_FOR_OPENCL
         halide_opencl_set_device_type("gpu");
 #endif
     }
-    StaticDispatch(function<int(Args...,buffer_t*,buffer_t*)>  _cpuFunc,function<int(Args...,buffer_t*,buffer_t*)>  _gpuFunc,buffer_t* _input) :cpuFunc(_cpuFunc),gpuFunc(_gpuFunc),input(_input) {
-        output=NULL;
-#if COMPILING_FOR_OPENCL
-        halide_opencl_set_device_type("gpu");
-#endif
-    }
-    StaticDispatch(function<int(Args...,buffer_t*,buffer_t*)>  _cpuFunc,function<int(Args...,buffer_t*,buffer_t*)>  _gpuFunc,buffer_t* _input,buffer_t* _output) :cpuFunc(_cpuFunc),gpuFunc(_gpuFunc),input(_input),output(_output) {
-#if COMPILING_FOR_OPENCL
-        halide_opencl_set_device_type("gpu");
-#endif
-    }
-    int realizeCPU(Args...);/**< Using CPU only */
-    int realizeGPU(Args...);/**< Using GPU only */
-    int realizeCPU(Args...,buffer_t* _output);/**< Using CPU only with specific output buffer  */
-    int realizeGPU(Args...,buffer_t* _output);/**< Using GPU only with specific output buffer */
-    /** \brief realize With CPU stealing
+    template<typename Func,typename ...Args>
+    int realize(Func func,Args...);/**< Using only One Device */
+
+    template<typename Func,typename ...Args>
+    int realize(buffer_t* _output,Func func,Args...);/**< Using only One Device with specific output buffer */
+
+    /** \brief realize on both CPU and GPU with specific workload
      *
-     * \param Args arguments for Halide function
-     * \param int CPU workload
+     * \param Func CPU Function
+     * \param Func GPU Function
+     * \param int Workload assign to CPU from 1 to 99 percentage
+     * \param Args.. argument for Halide Function
      * \return int
      *
      */
-    int realizeWithStealing (Args... args,int s);
-    void setInput(buffer_t* _input) {
-        input=_input;
-    }
+    template<typename Func,typename ...Args>
+    int realize(Func cFunc,Func gFUnc,int workload,Args... args);
+
     void setOutput(buffer_t* _output) {
         output=_output;
     }
-
-    int realize(Args...,int s);/**< Realize With Specific Workload */
-    int realize(Args...,int s,int kernalSize);/**< Realize With Specific Workload with specific kernel size */
     mutex *table_mutex;
 private:
-    function<int(Args...,buffer_t*,buffer_t*)> cpuFunc,gpuFunc;
     buffer_t *input,*output;
-    int CPUWorkload;
     buffer_t* createBuffers(int x,int y,int z,int w,int s);
 };
 
-template <typename ...Args>
-int StaticDispatch<Args...>::realizeCPU(Args... args,buffer_t* _output) {
-    cpuFunc(forward<Args>(args)...,args...,input,_output);
+template <typename Func,typename ...Args>
+int StaticDispatch::realize(Func func,Args... args) {
+    func(forward<Args>(args)...,input,output);
+    halide_copy_to_host(NULL,output); //because we can't sure with Device programer used ,so we will always call copy_host
     return 0;
 }
 
-template <typename ...Args>
-int StaticDispatch<Args...>::realizeGPU(Args... args,buffer_t* _output) {
-    gpuFunc(forward<Args>(args)...,input,_output);
+template <typename Func,typename ...Args>
+int StaticDispatch::realize(buffer_t* _output,Func func,Args... args) {
+    func(forward<Args>(args)...,input,_output);//because we can't sure with Device programer used ,so we will always call copy_host
     halide_copy_to_host(NULL,output);
     return 0;
 }
 
-template <typename ...Args>
-int StaticDispatch<Args...>::realizeGPU(Args... args) {
-#ifdef DEBUG
-    double t1=current_time();
-#endif
-
-    gpuFunc(forward<Args>(args)...,input,output);
-
-    halide_copy_to_host(NULL,output);
-#ifdef DEBUG
-    double t2=current_time();
-    exe_time_cpu=t2-t1;
-    double fps=1000.0/exe_time_cpu;
-
-    fusion_printf("GPU  (FPS) : %.f %.f\n",exe_time_cpu,fps);
-#endif
-
-    return 0;
-}
-
-template <typename ...Args>
-int StaticDispatch<Args...>::realizeCPU(Args... args) {
-
-#ifdef DEBUG
-    double t1=current_time();
-#endif
-
-    cpuFunc(forward<Args>(args)...,input,output);
-
-#ifdef DEBUG
-    double t2=current_time();
-    exe_time_cpu=t2-t1;
-    double fps=1000/exe_time_cpu;
-
-    fusion_printf("CPU  (FPS) : %.f (%.f)\n",exe_time_cpu,fps);
-#endif
-
-    return 0;
-}
-
-
-template <typename ...Args>
-int StaticDispatch<Args...>::realize(Args... args,int s) {
+template <typename Func,typename ...Args>
+int StaticDispatch::realize(Func cFUnc,Func gFunc,int workload,Args... args) {
     if(output==NULL)
         return -1;
-    buffer_t* cpuBuf=Internal::divBuffer(output,0,s);
-    buffer_t* gpuBuf=Internal::divBuffer(output,s,input->extent[1]);
+    int bufferWidth=output->extent[1]*workload/100;
+    buffer_t* cpuBuf=Internal::divBuffer(output,0,bufferWidth);
+    buffer_t* gpuBuf=Internal::divBuffer(output,bufferWidth,input->extent[1]);
 
     GPUThread gThread(input,gpuBuf);
-    gThread.run(gpuFunc,forward<Args>(args)...);
+    gThread.run(gFunc,forward<Args>(args)...);
 #ifdef DEBUG
     double t1=current_time();
 #endif
@@ -253,89 +204,89 @@ int StaticDispatch<Args...>::realize(Args... args,int s) {
     return 0;
 }
 
-
-template <typename ...Args>
-int StaticDispatch<Args...>::realize(Args... args,int s,int kernelSize) {
-    if(output==NULL)
-        return -1;
-    buffer_t* cpuBuf=Internal::divBuffer(output,0,s);
-    buffer_t* gpuInput=Internal::divBuffer(input,s-kernelSize,input->extent[1]);
-    buffer_t* gpuBuf=Internal::divBuffer(output,s,input->extent[1]);
-#ifdef DEBUG
-    fusion_printf("GPU Copy Size %d",input->extent[1]-s+kernelSize);
-#endif
-    thread gThread(gpuThread<args...>,forward<Args>(args)...,gpuFunc,input,gpuBuf);
-
-
-#ifdef DEBUG
-    double t1=current_time();
-#endif
-    cpuFunc(forward<Args>(args)...,input,cpuBuf);
-#ifdef DEBUG
-    double t2=current_time();
-    exe_time_cpu=t2-t1;
-#endif
-    gThread.join();
-    delete cpuBuf;
-    delete gpuBuf;
-    delete gpuInput;
-#ifdef DEBUG
-    double fps=1000/max(exe_time_gpu,exe_time_cpu);
-
-    fusion_printf("CPU V.S GPU (FPS) : %.f %.f (%.f)\n",exe_time_cpu,exe_time_gpu,fps);
-#endif
-    return 0;
-}
-
-
-template <typename ...Args>
-int StaticDispatch<Args...>::realizeWithStealing (Args... args,int s) {
-#ifdef DEBUG
-    double t1=current_time();
-#endif
-    if(output==NULL)
-        return -1;
-    buffer_t* cpuBuf=Internal::divBuffer(output,0,s);
-    buffer_t* gpuBuf=Internal::divBuffer(output,s,input->extent[1]);
-    status table[10]= {idle};
-    int offset=floor(cpuBuf->extent[1]/10);
-
-    table_mutex=new mutex;
-    GPUThread gThread(input,gpuBuf);
-    gThread.run(gpuFunc,cpuBuf,gpuBuf,table,offset,table_mutex,forward<Args>(args)...);
-
-    bool bBreak=false;
-    for(int i=0; i<=9; i++) {
-        table_mutex->lock();
-        if(table[i]>idle) {
-            bBreak=true;
-        }
-        table[i]=computing;
-        table_mutex->unlock();
-        if(bBreak)
-            break;
-        buffer_t* buf=Internal::divBuffer(output,i*offset,(i+1)*offset);
-
-        cpuFunc(args...,input,buf);
-        delete buf;
-        table_mutex->lock();
-        table[i]=finished;
-        table_mutex->unlock();
-    }
-
-#ifdef DEBUG
-    double t2=current_time();
-    exe_time_cpu=t2-t1;
-#endif
-    gThread.join();
-#ifdef DEBUG
-    double fps=1000/max(exe_time_gpu,exe_time_cpu);
-    fusion_printf("CPU V.S GPU (FPS) : %.f %.f (%.f)\n",exe_time_cpu,exe_time_gpu,fps);
-#endif
-    delete cpuBuf;
-    delete gpuBuf;
-    return 0;
-}
+//
+//template <typename ...Args>
+//int StaticDispatch<Args...>::realize(Args... args,int s,int kernelSize) {
+//    if(output==NULL)
+//        return -1;
+//    buffer_t* cpuBuf=Internal::divBuffer(output,0,s);
+//    buffer_t* gpuInput=Internal::divBuffer(input,s-kernelSize,input->extent[1]);
+//    buffer_t* gpuBuf=Internal::divBuffer(output,s,input->extent[1]);
+//#ifdef DEBUG
+//    fusion_printf("GPU Copy Size %d",input->extent[1]-s+kernelSize);
+//#endif
+//    thread gThread(gpuThread<args...>,forward<Args>(args)...,gpuFunc,input,gpuBuf);
+//
+//
+//#ifdef DEBUG
+//    double t1=current_time();
+//#endif
+//    cpuFunc(forward<Args>(args)...,input,cpuBuf);
+//#ifdef DEBUG
+//    double t2=current_time();
+//    exe_time_cpu=t2-t1;
+//#endif
+//    gThread.join();
+//    delete cpuBuf;
+//    delete gpuBuf;
+//    delete gpuInput;
+//#ifdef DEBUG
+//    double fps=1000/max(exe_time_gpu,exe_time_cpu);
+//
+//    fusion_printf("CPU V.S GPU (FPS) : %.f %.f (%.f)\n",exe_time_cpu,exe_time_gpu,fps);
+//#endif
+//    return 0;
+//}
+//
+//
+//template <typename ...Args>
+//int StaticDispatch<Args...>::realizeWithStealing (Args... args,int s) {
+//#ifdef DEBUG
+//    double t1=current_time();
+//#endif
+//    if(output==NULL)
+//        return -1;
+//    buffer_t* cpuBuf=Internal::divBuffer(output,0,s);
+//    buffer_t* gpuBuf=Internal::divBuffer(output,s,input->extent[1]);
+//    status table[10]= {idle};
+//    int offset=floor(cpuBuf->extent[1]/10);
+//
+//    table_mutex=new mutex;
+//    GPUThread gThread(input,gpuBuf);
+//    gThread.run(gpuFunc,cpuBuf,gpuBuf,table,offset,table_mutex,forward<Args>(args)...);
+//
+//    bool bBreak=false;
+//    for(int i=0; i<=9; i++) {
+//        table_mutex->lock();
+//        if(table[i]>idle) {
+//            bBreak=true;
+//        }
+//        table[i]=computing;
+//        table_mutex->unlock();
+//        if(bBreak)
+//            break;
+//        buffer_t* buf=Internal::divBuffer(output,i*offset,(i+1)*offset);
+//
+//        cpuFunc(args...,input,buf);
+//        delete buf;
+//        table_mutex->lock();
+//        table[i]=finished;
+//        table_mutex->unlock();
+//    }
+//
+//#ifdef DEBUG
+//    double t2=current_time();
+//    exe_time_cpu=t2-t1;
+//#endif
+//    gThread.join();
+//#ifdef DEBUG
+//    double fps=1000/max(exe_time_gpu,exe_time_cpu);
+//    fusion_printf("CPU V.S GPU (FPS) : %.f %.f (%.f)\n",exe_time_cpu,exe_time_gpu,fps);
+//#endif
+//    delete cpuBuf;
+//    delete gpuBuf;
+//    return 0;
+//}
 
 }
 }

@@ -10,8 +10,8 @@ namespace Dynamic{
     TODO:find out a way to interrupt cpu work thread
 
 */
-template<typename ...Args>
-void workThread(Args ...args,function<int(Args...,buffer_t*,buffer_t*)>  func,buffer_t* input ,buffer_t *output,status table[],int offset,mutex* table_mutex)
+template<typename Func,typename ...Args>
+void workThread(Func func,buffer_t* input ,buffer_t *output,status table[],int offset,mutex* table_mutex,Args ...args)
 {
     int end=output->extent[1];
     int start=offset*9;
@@ -51,43 +51,24 @@ void workThread(Args ...args,function<int(Args...,buffer_t*,buffer_t*)>  func,bu
 }
 
 
-template<typename ...Args>
+
 class DynamicDispatch
 {
 public:
     DynamicDispatch() {}
-    DynamicDispatch(function<int(Args...,buffer_t*,buffer_t*)>  _cpuFunc,function<int(Args...,buffer_t*,buffer_t*)>  _gpuFunc) :cpuFunc(_cpuFunc),gpuFunc(_gpuFunc)
+    DynamicDispatch(buffer_t* _input, buffer_t* _output):input(_input),output(_output)
     {
-        input=NULL;
-        initFunc();
-        output=NULL;
+
+
         #if COMPILING_FOR_OPENCL
         halide_opencl_set_device_type("gpu");
         #endif
 
     }
-    DynamicDispatch(function<int(Args...,buffer_t*,buffer_t*)>  _cpuFunc,function<int(Args...,buffer_t*,buffer_t*)>  _gpuFunc,buffer_t* _input) :cpuFunc(_cpuFunc),gpuFunc(_gpuFunc),input(_input)
-    {
-        output=NULL;
-        initFunc();
-        #if COMPILING_FOR_OPENCL
-        halide_opencl_set_device_type("gpu");
-        #endif
-
-    }
-    DynamicDispatch(function<int(Args...,buffer_t*,buffer_t*)>  _cpuFunc,function<int(Args...,buffer_t*,buffer_t*)>  _gpuFunc,buffer_t* _input,buffer_t* _output) :cpuFunc(_cpuFunc),gpuFunc(_gpuFunc),input(_input),output(_output)
-    {
-        initFunc();
-        #if COMPILING_FOR_OPENCL
-        halide_opencl_set_device_type("gpu");
-        #endif
-
-    }
-    int Realize(Args...);
-    int realizeCPU(Args...);
-    int realizeGPU(Args...);
-    int realizeCPU(Args...,buffer_t* _output);
-    int realizeGPU(Args...,buffer_t* _output);
+    template<typename Func,typename ...Args>
+    int realize(Func fucn,Args...);
+    template<typename Func,typename ...Args>
+    int realize(Func cpuFunc,Func gpuFunc,Args...);
 
 
     void setInput(buffer_t* _input)
@@ -102,7 +83,7 @@ public:
 
     mutex *table_mutex;
 private:
-    function<int(Args...,buffer_t*,buffer_t*)> cpuFunc,gpuFunc;
+
 
     buffer_t *input,*output;
 
@@ -112,68 +93,17 @@ private:
 
 };
 
-template <typename ...Args>
-int DynamicDispatch<Args...>::realizeCPU(Args... args,buffer_t* _output)
+template <typename Func,typename ...Args>
+int DynamicDispatch<Args...>::realize(Func func,Args... args)
 {
-    cpuFunc(forward<Args>(args)...,args...,input,_output);
-    return 0;
-}
-
-template <typename ...Args>
-int DynamicDispatch<Args...>::realizeGPU(Args... args,buffer_t* _output)
-{
-    gpuFunc(forward<Args>(args)...,input,_output);
+    func(forward<Args>(args)...,input,_utput);
     halide_copy_to_host(NULL,output);
     return 0;
 }
 
-template <typename ...Args>
-int DynamicDispatch<Args...>::realizeGPU(Args... args)
-{
-#ifdef DEBUG
-    double t1=current_time();
-#endif
 
-    gpuFunc(forward<Args>(args)...,input,output);
-
-    halide_copy_to_host(NULL,output);
-#ifdef DEBUG
-    double t2=current_time();
-    exe_time_cpu=t2-t1;
-    double fps=1000/exe_time_cpu;
-
-    fusion_printf("GPU  (FPS) : %d %d\n",exe_time_cpu,fps);
-#endif
-
-    return 0;
-}
-
-template <typename ...Args>
-int DynamicDispatch<Args...>::realizeCPU(Args... args)
-{
-
-#ifdef DEBUG
-    double t1=current_time();
-#endif
-
-    cpuFunc(forward<Args>(args)...,input,output);
-
-#ifdef DEBUG
-    double t2=current_time();
-    exe_time_cpu=t2-t1;
-    double fps=1000/exe_time_cpu;
-    string str="CPU  (FPS) : "+to_string(exe_time_cpu)+"   ( "+to_string(fps)+ " ) ";
-    fusion_printf("CPU  (FPS) : %d (%d)\n",exe_time_cpu,fps);
-#endif
-
-    return 0;
-}
-
-
-
-
-template <typename ...Args>
-int DynamicDispatch<Args...>::Realize(Args... args)
+template <typename Func,typename ...Args>
+int DynamicDispatch::realize(Func cpuFunc,Func gpuFunc,Args... args)
 {
     status table[10]= {idle};
     int offset=floor(input->extent[1]/10);
@@ -200,8 +130,9 @@ int DynamicDispatch<Args...>::Realize(Args... args)
         table_mutex->unlock();
     }
     gpuWorkThread.join();
-
 }
+
+
 }
 }
 #endif
