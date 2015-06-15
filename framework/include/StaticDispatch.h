@@ -178,7 +178,7 @@ int StaticDispatch::realize(buffer_t* _output,Func func,Args... args) {
 }
 
 template <typename Func,typename ...Args>
-int StaticDispatch::realize(Func cFUnc,Func gFunc,int workload,Args... args) {
+int StaticDispatch::realize(Func cFunc,Func gFunc,int workload,Args... args) {
     if(output==NULL)
         return -1;
     int bufferWidth=output->extent[1]*workload/100;
@@ -190,7 +190,7 @@ int StaticDispatch::realize(Func cFUnc,Func gFunc,int workload,Args... args) {
 #ifdef DEBUG
     double t1=current_time();
 #endif
-//    cpuFunc(forward<Args>(args)...,input,cpuBuf);
+    cFunc(forward<Args>(args)...,input,cpuBuf);
 #ifdef DEBUG
     double t2=current_time();
     exe_time_cpu=t2-t1;

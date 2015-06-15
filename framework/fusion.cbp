@@ -28,6 +28,7 @@
 		<Unit filename="include/fusion.h" />
 		<Unit filename="include/fusion_info.h" />
 		<Unit filename="include/internal.h" />
+		<Unit filename="include/testPerformance.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

@@ -11,59 +11,13 @@
 #ifndef DBL_MAX
 #define DBL_MAX 1.79769e+308
 #endif
-#define CPU 1
-#define GPU 2
-#define Fus 3
 
+#include "testPerformance.h"
 using namespace std;
 using namespace Fusion::Static;
-inline void testStaticPerformance(int type,float r_sigma,buffer_t* input,buffer_t* output,int workload=50) {
-    StaticDispatch fusion(input,output);
 
-    double bestT =DBL_MAX;
-    double worstT=0;
-    switch (type) {
-    case CPU:
-        fusion.realize(bilateral_grid_cpu,r_sigma);
-        for (int i = 0; i < 5; i++) {
-            double t1=current_time();
-             fusion.realize(bilateral_grid_cpu,r_sigma);
-            double t2=current_time();
-            double t=t2-t1;
-            if (t < bestT) bestT = t;
-            if (t > worstT) worstT = t;
-        }
-        cout<<setw(15)<<"Best CPU: "<<setw(10)<<bestT<<setw(15)<<" Worst CPU: "<<setw(10)<<worstT<<endl;
-        break;
-    case GPU:
-        fusion.realize(bilateral_grid_gpu,r_sigma);
-        for (int i = 0; i < 5; i++) {
-            double t1=current_time();
-            fusion.realize(bilateral_grid_gpu,r_sigma);
-            double t2=current_time();
-            double t=t2-t1;
-            if (t < bestT) bestT = t;
-            if (t > worstT) worstT = t;
-        }
-        cout<<setw(15)<<"Best GPU: "<<setw(10)<<bestT<<setw(15)<<" Worst GPU: "<<setw(10)<<worstT<<endl;
-        break;
-    case Fus:
-        fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,workload,r_sigma);
-        for (int i = 0; i < 5; i++) {
-            double t1=current_time();
-            fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,workload,r_sigma);
-            double t2=current_time();
-            double t=t2-t1;
-            if (t < bestT) bestT = t;
-            if (t > worstT) worstT = t;
-        }
-        cout<<setw(15)<<"Best Fusion: "<<setw(10)<<bestT<<setw(15)<<" Worst Fusion: "<<setw(10)<<worstT<<endl;
-        break;
-    }
-}
-
-
-int main(int argc,char** argv) {
+int main(int argc,char** argv)
+{
     if (argc < 3)
     {
         printf("Usage: ./process input.png r_sigma output.png\n"
@@ -71,21 +25,27 @@ int main(int argc,char** argv) {
         return 0;
     }
     int workload=50;
-    if(argc==4)
+    if(argc>=5){
         workload=atoi(argv[4]);
+    }
+
     Image<float> input = load<float>(argv[1]);
     Image<float> output(input.width(),input.height(),input.channels());
     cout<<"Image Size : "<<input.width()<<" X "<<input.height()<<" X "<<input.channels()<<endl;
     float r_sigma = atof(argv[2]);
 
+
+
+
+    Fusion::Test::testStaticPerformance(CPU,bilateral_grid_cpu,input,output,r_sigma);
+    Fusion::Test::testStaticPerformance(GPU,bilateral_grid_gpu,input,output,r_sigma);
+
+//    Fusion::Test::testStaticPerformance(bilateral_grid_cpu,bilateral_grid_gpu,input,output,workload,r_sigma);
+    Fusion::Test::testDynamicPerformance(bilateral_grid_cpu,bilateral_grid_gpu,input,output,r_sigma);
+
+
+
     StaticDispatch fusion(input,output);
-
-
-
-    testStaticPerformance(CPU,r_sigma,(buffer_t*)(input),output);
-    testStaticPerformance(GPU,r_sigma,(buffer_t*)(input),output);
-    testStaticPerformance(Fus,r_sigma,input,output,workload);
-
     fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,workload,r_sigma);
     save(output, argv[3]);
 
