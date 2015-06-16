@@ -68,13 +68,24 @@ int main(int argc, char **argv) {
 
     Target target = get_target_from_environment();
     if (target.has_gpu_feature()) {
-        histogram.compute_root().reorder(c, z, x, y).gpu_tile(x, y, 8, 8);
-        histogram.update().reorder(c, r.x, r.y, x, y).gpu_tile(x, y, 8, 8).unroll(c);
-        blurx.compute_root().gpu_tile(x, y, z, 16, 16, 1);
-        blury.compute_root().gpu_tile(x, y, z, 16, 16, 1);
-        blurz.compute_root().gpu_tile(x, y, z, 8, 8, 4);
-        bilateral_grid.compute_root().gpu_tile(x, y, s_sigma, s_sigma);
-         bilateral_grid.compile_to_file("bilateral_grid_gpu", r_sigma, input, target);
+        if(target.os==Target::OS::Android) {
+            histogram.compute_root().reorder(c, z, x, y).gpu_tile(x, y, 8, 8);
+            histogram.update().reorder(c, r.x, r.y, x, y).gpu_tile(x, y, 8, 8).unroll(c);
+            blurx.compute_root().gpu_tile(x, y, z, 8, 8, 1);
+            blury.compute_root().gpu_tile(x, y, z, 8, 8, 1);
+            blurz.compute_root().gpu_tile(x, y, z, 8, 8, 1);
+            bilateral_grid.compute_root().gpu_tile(x, y, s_sigma, s_sigma);
+            bilateral_grid.compile_to_file("bilateral_grid_gpu", {r_sigma, input}, target);
+
+        } else {
+            histogram.compute_root().reorder(c, z, x, y).gpu_tile(x, y, 8, 8);
+            histogram.update().reorder(c, r.x, r.y, x, y).gpu_tile(x, y, 8, 8).unroll(c);
+            blurx.compute_root().gpu_tile(x, y, z, 16, 16, 1);
+            blury.compute_root().gpu_tile(x, y, z, 16, 16, 1);
+            blurz.compute_root().gpu_tile(x, y, z, 8, 8, 4);
+            bilateral_grid.compute_root().gpu_tile(x, y, s_sigma, s_sigma);
+            bilateral_grid.compile_to_file("bilateral_grid_gpu", {r_sigma, input}, target);
+        }
     } else {
 
         // CPU schedule
@@ -84,7 +95,7 @@ int main(int argc, char **argv) {
         blurx.compute_root().reorder(c, x, y, z).parallel(z).vectorize(x, 4).unroll(c);
         blury.compute_root().reorder(c, x, y, z).parallel(z).vectorize(x, 4).unroll(c);
         bilateral_grid.compute_root().parallel(y).vectorize(x, 4);
-        bilateral_grid.compile_to_file("bilateral_grid_cpu", r_sigma, input, target);
+        bilateral_grid.compile_to_file("bilateral_grid_cpu", {r_sigma, input}, target);
     }
 
 

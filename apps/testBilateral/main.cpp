@@ -40,14 +40,15 @@ int main(int argc,char** argv)
     Fusion::Test::testStaticPerformance(CPU,bilateral_grid_cpu,input,output,r_sigma);
     Fusion::Test::testStaticPerformance(GPU,bilateral_grid_gpu,input,output,r_sigma);
 
-//    Fusion::Test::testStaticPerformance(bilateral_grid_cpu,bilateral_grid_gpu,input,output,workload,r_sigma);
+    Fusion::Test::testStaticPerformance(bilateral_grid_cpu,bilateral_grid_gpu,input,output,workload,r_sigma);
     Fusion::Test::testDynamicPerformance(bilateral_grid_cpu,bilateral_grid_gpu,input,output,r_sigma);
 
-
+    Fusion::Test::testSizePerformance(CPU,bilateral_grid_cpu,input,output,workload,r_sigma);
+    Fusion::Test::testSizePerformance(GPU,bilateral_grid_gpu,input,output,workload,r_sigma);
 
     StaticDispatch fusion(input,output);
     fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,workload,r_sigma);
-    save(output, argv[3]);
+//    save(output, argv[3]);
 
     return 0;
 
