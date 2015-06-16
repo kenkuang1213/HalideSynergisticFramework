@@ -121,10 +121,10 @@ int main(int argc, char **argv) {
     if (target.has_gpu_feature()) {
         // gpu schedule
         if(target.os==Target::OS::Android) {
-            std::cout<<"android"<<std::end;
-            output.compute_root().gpu_tile(x, y, 4, 4, DeviceAPI::Default_GPU);
+            std::cout<<"android"<<std::endl;
+            output.compute_root().gpu_tile(x, y, 8, 4, DeviceAPI::Default_GPU);
             for (int j = 0; j < J; j++) {
-                int blockw = 4, blockh = 4;
+                int blockw = 8, blockh = 4;
                 if (j > 3) {
                     blockw = 2;
                     blockh = 2;
