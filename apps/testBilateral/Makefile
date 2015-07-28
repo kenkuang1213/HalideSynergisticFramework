@@ -4,7 +4,7 @@ all:Release
 halide/bilateral_grid: halide/bilateral_grid.cpp
 	g++ halide/bilateral_grid.cpp -I$(HALIDE_PATH)/include -L$(HALIDE_PATH)/bin -o halide/bilateral_grid -lpthread -ldl -lz -lHalide -std=c++11
 halide/x86_64/bilateral_grid_gpu.o:halide/bilateral_grid
-	@cd halide/;mkdir -p x86_64;cd x86_64;../bilateral_grid 15;HL_TARGET=host-opencl ../bilateral_grid 15;
+	@cd halide/;mkdir -p x86_64;cd x86_64;../bilateral_grid 15;HL_TARGET=opencl ../bilateral_grid 15;
 halide/debug_info/bilateral_grid_gpu.o:halide/bilateral_grid
 	@cd halide/;mkdir -p debug_info;cd debug_info;../bilateral_grid 15;HL_TARGET=host-opencl-debug ../bilateral_grid 15;
 halide/android/bilateral_grid_gpu.o:halide/bilateral_grid

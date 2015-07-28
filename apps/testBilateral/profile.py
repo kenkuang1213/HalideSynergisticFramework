@@ -14,7 +14,7 @@ APITime={}
 start=False
 for i in range(0,len(contents)):
 	#print contents[i]
-	if contents[i]=="sec\r\n"  : 
+	if contents[i]=="sec\r\n" or contents[i]=="sec\r" or contents[i]=="sec\n" : 
 
 		if start:
 			break
@@ -38,6 +38,8 @@ for i in range(0,len(contents_sec)):
 			APITime[title]+=float(tmp[1])
 totalTime=0
 for i in APITime:
-	print i +"  "+str(APITime[i])
+	print i 
 	totalTime+=APITime[i]
-print totalTime
+for i in APITime:
+	print str(APITime[i])
+print "Total time : "+str(totalTime)

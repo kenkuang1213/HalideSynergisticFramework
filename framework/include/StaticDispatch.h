@@ -81,6 +81,7 @@ void gpuThread(Function  func,buffer_t* input ,buffer_t *output,Args ...args) {
     double t1=current_time();
 #endif
     func(forward<Args>(args)...,input,output);
+    halide_device_sync(NULL,output);
     halide_copy_to_host(NULL,output);
 #ifdef DEBUG
     double t2=current_time();
@@ -166,14 +167,16 @@ private:
 template <typename Func,typename ...Args>
 int StaticDispatch::realize(Func func,Args... args) {
     func(forward<Args>(args)...,input,output);
-    halide_copy_to_host(NULL,output); //because we can't sure with Device programer used ,so we will always call copy_host
+    halide_device_sync(NULL,output);
+    halide_copy_to_host(NULL,output); //because we can't sure with Device programer used ,so we will always call copy_to_host
     return 0;
 }
 
 template <typename Func,typename ...Args>
 int StaticDispatch::realize(buffer_t* _output,Func func,Args... args) {
-    func(forward<Args>(args)...,input,_output);//because we can't sure with Device programer used ,so we will always call copy_host
-    halide_copy_to_host(NULL,output);
+    func(forward<Args>(args)...,input,_output);//because we can't sure with Device programer used ,so we will always call copy_to_host
+    halide_device_sync(NULL,_output);
+    halide_copy_to_host(NULL,_output);
     return 0;
 }
 
@@ -181,7 +184,15 @@ template <typename Func,typename ...Args>
 int StaticDispatch::realize(Func cFunc,Func gFunc,int workload,Args... args) {
     if(output==NULL)
         return -1;
-    int bufferWidth=output->extent[1]*workload/100;
+    if(workload<=0){
+        gFunc(forward<Args>(args)...,input,output);
+        return 0;
+    }
+    else if(workload>=100){
+        cFunc(forward<Args>(args)...,input,output);
+        return 0;
+    }
+    int bufferWidth=(output->extent[1]*workload)/100;
     buffer_t* cpuBuf=Internal::divBuffer(output,0,bufferWidth);
     buffer_t* gpuBuf=Internal::divBuffer(output,bufferWidth,input->extent[1]);
 
@@ -204,89 +215,6 @@ int StaticDispatch::realize(Func cFunc,Func gFunc,int workload,Args... args) {
     return 0;
 }
 
-//
-//template <typename ...Args>
-//int StaticDispatch<Args...>::realize(Args... args,int s,int kernelSize) {
-//    if(output==NULL)
-//        return -1;
-//    buffer_t* cpuBuf=Internal::divBuffer(output,0,s);
-//    buffer_t* gpuInput=Internal::divBuffer(input,s-kernelSize,input->extent[1]);
-//    buffer_t* gpuBuf=Internal::divBuffer(output,s,input->extent[1]);
-//#ifdef DEBUG
-//    fusion_printf("GPU Copy Size %d",input->extent[1]-s+kernelSize);
-//#endif
-//    thread gThread(gpuThread<args...>,forward<Args>(args)...,gpuFunc,input,gpuBuf);
-//
-//
-//#ifdef DEBUG
-//    double t1=current_time();
-//#endif
-//    cpuFunc(forward<Args>(args)...,input,cpuBuf);
-//#ifdef DEBUG
-//    double t2=current_time();
-//    exe_time_cpu=t2-t1;
-//#endif
-//    gThread.join();
-//    delete cpuBuf;
-//    delete gpuBuf;
-//    delete gpuInput;
-//#ifdef DEBUG
-//    double fps=1000/max(exe_time_gpu,exe_time_cpu);
-//
-//    fusion_printf("CPU V.S GPU (FPS) : %.f %.f (%.f)\n",exe_time_cpu,exe_time_gpu,fps);
-//#endif
-//    return 0;
-//}
-//
-//
-//template <typename ...Args>
-//int StaticDispatch<Args...>::realizeWithStealing (Args... args,int s) {
-//#ifdef DEBUG
-//    double t1=current_time();
-//#endif
-//    if(output==NULL)
-//        return -1;
-//    buffer_t* cpuBuf=Internal::divBuffer(output,0,s);
-//    buffer_t* gpuBuf=Internal::divBuffer(output,s,input->extent[1]);
-//    status table[10]= {idle};
-//    int offset=floor(cpuBuf->extent[1]/10);
-//
-//    table_mutex=new mutex;
-//    GPUThread gThread(input,gpuBuf);
-//    gThread.run(gpuFunc,cpuBuf,gpuBuf,table,offset,table_mutex,forward<Args>(args)...);
-//
-//    bool bBreak=false;
-//    for(int i=0; i<=9; i++) {
-//        table_mutex->lock();
-//        if(table[i]>idle) {
-//            bBreak=true;
-//        }
-//        table[i]=computing;
-//        table_mutex->unlock();
-//        if(bBreak)
-//            break;
-//        buffer_t* buf=Internal::divBuffer(output,i*offset,(i+1)*offset);
-//
-//        cpuFunc(args...,input,buf);
-//        delete buf;
-//        table_mutex->lock();
-//        table[i]=finished;
-//        table_mutex->unlock();
-//    }
-//
-//#ifdef DEBUG
-//    double t2=current_time();
-//    exe_time_cpu=t2-t1;
-//#endif
-//    gThread.join();
-//#ifdef DEBUG
-//    double fps=1000/max(exe_time_gpu,exe_time_cpu);
-//    fusion_printf("CPU V.S GPU (FPS) : %.f %.f (%.f)\n",exe_time_cpu,exe_time_gpu,fps);
-//#endif
-//    delete cpuBuf;
-//    delete gpuBuf;
-//    return 0;
-//}
 
 }
 }
