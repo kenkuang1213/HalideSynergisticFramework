@@ -80,32 +80,11 @@ int main(int argc,char** argv) {
 
     }
 #endif // ANDROID
-//    StaticDispatch fusion(input,output);
-//       DynamicDispatch fusion(input,output);
-//    fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,r_sigma);
-//    fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,workload,r_sigma);
-//    fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,50,r_sigma);
-//    fusion.realize(bilateral_grid_gpu,r_sigma);
-//    fusion.realize(bilateral_grid_gpu,r_sigma);
-//    input.set_host_dirty(true);
-//#ifdef ANDROID
-//    __android_log_print(ANDROID_LOG_INFO,"halide","sec\n");
-//#else
-//    cout<<"sec"<<endl;
-//#endif // ANDROID
-//    double t1=current_time();
-//        fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,r_sigma);
-//    fusion.realize(bilateral_grid_gpu,r_sigma);
-//    fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,workload,r_sigma);
-//    cout<<current_time()-t1<<endl;
-//#ifdef ANDROID
-//    __android_log_print(ANDROID_LOG_INFO,"halide","sec\n");
-//#else
-//    cout<<"sec"<<endl;
-//#endif // ANDROID
+    StaticDispatch fusion(input,output);
+    fusion.realize(bilateral_grid_cpu,bilateral_grid_gpu,workload,r_sigma);
 
 
-//    save(output, argv[3]);
+    save(output, argv[3]);
 
     return 0;
 
